@@ -1,0 +1,123 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Quicksand:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 340 30% 97%;
+    --foreground: 340 25% 20%;
+
+    --card: 340 40% 98%;
+    --card-foreground: 340 25% 20%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 340 25% 20%;
+
+    --primary: 346 77% 62%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 340 40% 94%;
+    --secondary-foreground: 340 25% 25%;
+
+    --muted: 340 20% 94%;
+    --muted-foreground: 340 10% 50%;
+
+    --accent: 0 70% 72%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 340 30% 90%;
+    --input: 340 30% 90%;
+    --ring: 346 77% 62%;
+
+    --radius: 1rem;
+
+    --rose-light: 340 60% 95%;
+    --rose-medium: 346 60% 85%;
+    --rose-glow: 346 77% 72%;
+    --blush: 350 50% 90%;
+    --cream: 30 40% 97%;
+    --gold: 40 70% 55%;
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-body;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display;
+  }
+}
+
+@layer utilities {
+  .gradient-romantic {
+    background: linear-gradient(135deg, hsl(var(--rose-light)), hsl(var(--cream)), hsl(var(--blush)));
+  }
+
+  .gradient-hero {
+    background: linear-gradient(180deg, hsl(var(--rose-light)) 0%, hsl(var(--background)) 100%);
+  }
+
+  .gradient-card {
+    background: linear-gradient(145deg, hsl(var(--card)), hsl(var(--rose-light)));
+  }
+
+  .text-gradient-love {
+    background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .shadow-romantic {
+    box-shadow: 0 4px 30px -5px hsl(var(--primary) / 0.15), 0 2px 10px -3px hsl(var(--primary) / 0.1);
+  }
+
+  .shadow-glow {
+    box-shadow: 0 0 30px hsl(var(--primary) / 0.2), 0 0 60px hsl(var(--primary) / 0.1);
+  }
+}
+
+/* Loading screen fade */
+@keyframes pulse-heart {
+  0%, 100% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(1.15); opacity: 1; }
+}
+
+.animate-pulse-heart {
+  animation: pulse-heart 1.5s ease-in-out infinite;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: hsl(var(--rose-light));
+}
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--primary) / 0.3);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--primary) / 0.5);
+}
