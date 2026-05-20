@@ -5,13 +5,14 @@ import { motion, AnimatePresence } from "framer-motion";
 
 const navItems = [
   { path: "/", label: "Home" },
-  { path: "/our-story", label: "Our Story" },
-  { path: "/gallery", label: "Gallery" },
-  { path: "/reasons", label: "100 Reasons" },
+  
+  
+  
   { path: "/birthday-wish", label: "Birthday Wish" },
+  { path: "/gallery", label: "Gallery" },
   { path: "/love-counter", label: "Love Counter" },
   { path: "/surprise", label: "Surprise" },
-  { path: "/future", label: "Our Future" },
+  
 ];
 
 const Navigation = () => {
