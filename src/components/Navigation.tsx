@@ -9,16 +9,21 @@ import {
   Timer,
   Gift,
   Sparkles,
+  HelpCircle,
+  Award,
+  PartyPopper,
 } from "lucide-react";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const navItems = [
-  { path: "/", label: "Home", icon: Home },
-  { path: "/birthday-wish", label: "Birthday Wish", icon: Cake },
+  { path: "/home", label: "Home", icon: Home },
+  { path: "/birthday-wish", label: "Wish", icon: Cake },
   { path: "/gallery", label: "Gallery", icon: Images },
-  { path: "/love-counter", label: "Love Counter", icon: Timer },
+  { path: "/love-counter", label: "Counter", icon: Timer },
   { path: "/surprise", label: "Surprise", icon: Gift },
+  { path: "/love-quiz", label: "Quiz", icon: HelpCircle },
+  { path: "/certificate", label: "Certificate", icon: Award },
 ];
 
 const Navigation = () => {
@@ -26,88 +31,165 @@ const Navigation = () => {
   const [open, setOpen] = useState(false);
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-40 border-b border-white/50 bg-white/55 backdrop-blur-xl shadow-sm">
-      <div className="container mx-auto flex h-14 items-center justify-between px-4">
-        {/* Logo */}
-        <Link
-          to="/"
-          onClick={() => setOpen(false)}
-          className="group flex items-center gap-2"
-        >
-          <motion.div
-            whileHover={{ rotate: 12, scale: 1.08 }}
-            className="relative flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-rose-500 to-pink-500 shadow-lg shadow-rose-300/40"
+    <>
+      <nav className="fixed left-0 right-0 top-0 z-40 border-b border-white/60 bg-white/65 shadow-lg shadow-rose-200/25 backdrop-blur-2xl">
+        <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-5">
+          {/* Big Logo */}
+          <Link
+            to="/home"
+            onClick={() => setOpen(false)}
+            className="group flex items-center gap-3"
           >
-            <Heart className="h-5 w-5 fill-white text-white" />
+            <motion.div
+              whileHover={{ rotate: 10, scale: 1.08 }}
+              whileTap={{ scale: 0.95 }}
+              className="relative flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-rose-500 via-pink-500 to-red-500 shadow-xl shadow-rose-300/50"
+            >
+              <Heart className="h-7 w-7 fill-white text-white" />
 
-            <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-white shadow-sm">
-              <Sparkles className="h-2.5 w-2.5 text-rose-500" />
-            </span>
-          </motion.div>
-
-          <div className="hidden sm:block leading-tight">
-            <p className="font-display text-lg font-extrabold bg-gradient-to-r from-rose-500 via-pink-500 to-red-500 bg-clip-text text-transparent">
-              My Love
-            </p>
-            <p className="-mt-1 text-[10px] font-semibold tracking-wide text-rose-500/70">
-              made with love
-            </p>
-          </div>
-        </Link>
-
-        {/* Desktop Menu */}
-        <div className="hidden items-center gap-2 rounded-full border border-white/70 bg-white/45 p-1 shadow-sm backdrop-blur-md md:flex">
-          {navItems.map((item) => {
-            const Icon = item.icon;
-            const active = location.pathname === item.path;
-
-            return (
-              <Link
-                key={item.path}
-                to={item.path}
-                className={`relative flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold transition-all duration-300 ${
-                  active
-                    ? "text-white"
-                    : "text-rose-600/75 hover:bg-white/60 hover:text-rose-700"
-                }`}
+              <motion.span
+                animate={{ rotate: 360 }}
+                transition={{ repeat: Infinity, duration: 8, ease: "linear" }}
+                className="absolute -right-1 -top-1 flex h-6 w-6 items-center justify-center rounded-full bg-white shadow-md"
               >
-                {active && (
-                  <motion.span
-                    layoutId="activeNav"
-                    className="absolute inset-0 rounded-full bg-gradient-to-r from-rose-500 to-pink-500 shadow-md shadow-rose-300/40"
-                    transition={{ type: "spring", stiffness: 350, damping: 28 }}
-                  />
-                )}
+                <Sparkles className="h-3.5 w-3.5 text-rose-500" />
+              </motion.span>
+            </motion.div>
 
-                <Icon className="relative z-10 h-4 w-4" />
-                <span className="relative z-10">{item.label}</span>
-              </Link>
-            );
-          })}
+            <div className="hidden leading-tight sm:block">
+              <p className="bg-gradient-to-r from-rose-500 via-pink-500 to-red-500 bg-clip-text font-display text-2xl font-extrabold text-transparent">
+                My Love
+              </p>
+              <p className="-mt-1 text-xs font-bold tracking-wide text-rose-500/75">
+                birthday surprise world
+              </p>
+            </div>
+          </Link>
+
+          {/* Big Desktop Menu */}
+          <div className="hidden items-center gap-2 rounded-full border border-white/80 bg-white/50 p-2 shadow-xl shadow-rose-200/30 backdrop-blur-xl lg:flex">
+            {navItems.map((item) => {
+              const Icon = item.icon;
+              const active = location.pathname === item.path;
+
+              return (
+                <Link
+                  key={item.path}
+                  to={item.path}
+                  className={`relative flex items-center gap-2 rounded-full px-4 py-3 text-sm font-bold transition-all duration-300 ${
+                    active
+                      ? "text-white"
+                      : "text-rose-600/80 hover:bg-white/80 hover:text-rose-700"
+                  }`}
+                >
+                  {active && (
+                    <motion.span
+                      layoutId="activeNav"
+                      className="absolute inset-0 rounded-full bg-gradient-to-r from-rose-500 to-pink-500 shadow-lg shadow-rose-300/50"
+                      transition={{
+                        type: "spring",
+                        stiffness: 350,
+                        damping: 28,
+                      }}
+                    />
+                  )}
+
+                  <Icon className="relative z-10 h-5 w-5" />
+                  <span className="relative z-10">{item.label}</span>
+                </Link>
+              );
+            })}
+          </div>
+
+          {/* Tablet Menu */}
+          <div className="hidden items-center gap-2 md:flex lg:hidden">
+            {navItems.slice(0, 4).map((item) => {
+              const Icon = item.icon;
+              const active = location.pathname === item.path;
+
+              return (
+                <Link
+                  key={item.path}
+                  to={item.path}
+                  className={`flex h-12 w-12 items-center justify-center rounded-full border shadow-md transition-all ${
+                    active
+                      ? "border-rose-300 bg-gradient-to-r from-rose-500 to-pink-500 text-white shadow-rose-300/40"
+                      : "border-white/80 bg-white/70 text-rose-600 hover:bg-rose-100"
+                  }`}
+                >
+                  <Icon className="h-5 w-5" />
+                </Link>
+              );
+            })}
+
+            <button
+              onClick={() => setOpen(true)}
+              className="flex h-12 w-12 items-center justify-center rounded-full border border-white/80 bg-white/70 text-rose-600 shadow-md"
+            >
+              <Menu className="h-6 w-6" />
+            </button>
+          </div>
+
+          {/* Mobile Toggle */}
+          <motion.button
+            whileTap={{ scale: 0.9 }}
+            onClick={() => setOpen(true)}
+            className="flex h-12 w-12 items-center justify-center rounded-full border border-white/80 bg-white/70 text-rose-600 shadow-md backdrop-blur-md md:hidden"
+          >
+            <Menu className="h-6 w-6" />
+          </motion.button>
         </div>
+      </nav>
 
-        {/* Mobile Toggle */}
-        <motion.button
-          whileTap={{ scale: 0.9 }}
-          onClick={() => setOpen(!open)}
-          className="flex h-10 w-10 items-center justify-center rounded-full border border-white/70 bg-white/60 text-rose-600 shadow-sm backdrop-blur-md md:hidden"
-        >
-          {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-        </motion.button>
-      </div>
-
-      {/* Mobile Menu */}
+      {/* Mobile / Tablet Menu */}
       <AnimatePresence>
         {open && (
           <motion.div
-            initial={{ opacity: 0, y: -12, height: 0 }}
-            animate={{ opacity: 1, y: 0, height: "auto" }}
-            exit={{ opacity: 0, y: -12, height: 0 }}
-            transition={{ duration: 0.25 }}
-            className="overflow-hidden border-b border-white/60 bg-white/80 backdrop-blur-xl md:hidden"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setOpen(false)}
+            className="fixed inset-0 z-50 bg-black/35 p-4 backdrop-blur-sm"
           >
-            <div className="mx-4 mb-4 mt-2 rounded-3xl border border-white/70 bg-white/60 p-3 shadow-xl">
-              <div className="grid gap-2">
+            <motion.div
+              initial={{ opacity: 0, y: -25, scale: 0.96 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -25, scale: 0.96 }}
+              transition={{ type: "spring", stiffness: 150 }}
+              onClick={(e) => e.stopPropagation()}
+              className="mx-auto mt-4 w-full max-w-lg overflow-hidden rounded-[2.2rem] border border-white/80 bg-white/90 p-5 shadow-2xl backdrop-blur-xl"
+            >
+              {/* Menu Header */}
+              <div className="relative overflow-hidden rounded-[1.8rem] bg-gradient-to-r from-rose-500 to-pink-500 p-5 text-white shadow-lg shadow-rose-300/40">
+                <div className="absolute -right-8 -top-8 h-28 w-28 rounded-full bg-white/20 blur-2xl" />
+
+                <div className="relative flex items-center justify-between">
+                  <div className="flex items-center gap-4">
+                    <div className="flex h-14 w-14 items-center justify-center rounded-full bg-white/20">
+                      <PartyPopper className="h-7 w-7 text-white" />
+                    </div>
+
+                    <div>
+                      <p className="font-display text-2xl font-extrabold">
+                        Birthday Menu
+                      </p>
+                      <p className="text-sm font-semibold text-white/80">
+                        choose a cute surprise
+                      </p>
+                    </div>
+                  </div>
+
+                  <button
+                    onClick={() => setOpen(false)}
+                    className="flex h-11 w-11 items-center justify-center rounded-full bg-white/20"
+                  >
+                    <X className="h-6 w-6" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Big Menu Items */}
+              <div className="mt-5 grid grid-cols-2 gap-4">
                 {navItems.map((item) => {
                   const Icon = item.icon;
                   const active = location.pathname === item.path;
@@ -117,34 +199,40 @@ const Navigation = () => {
                       key={item.path}
                       to={item.path}
                       onClick={() => setOpen(false)}
-                      className={`flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-semibold transition-all ${
+                      className={`group relative overflow-hidden rounded-3xl border px-4 py-5 text-center shadow-md transition-all ${
                         active
-                          ? "bg-gradient-to-r from-rose-500 to-pink-500 text-white shadow-md shadow-rose-300/40"
-                          : "text-rose-700 hover:bg-rose-100/70"
+                          ? "border-rose-300 bg-gradient-to-r from-rose-500 to-pink-500 text-white"
+                          : "border-white/80 bg-white/70 text-rose-700 hover:bg-rose-100"
                       }`}
                     >
-                      <span
-                        className={`flex h-9 w-9 items-center justify-center rounded-full ${
-                          active ? "bg-white/20" : "bg-white/70"
+                      <div className="absolute -right-6 -top-6 h-20 w-20 rounded-full bg-white/20 blur-xl" />
+
+                      <div
+                        className={`relative mx-auto flex h-12 w-12 items-center justify-center rounded-full ${
+                          active ? "bg-white/20" : "bg-rose-100"
                         }`}
                       >
-                        <Icon className="h-4 w-4" />
-                      </span>
+                        <Icon className="h-6 w-6" />
+                      </div>
 
-                      <span>{item.label}</span>
+                      <p className="relative mt-3 text-sm font-bold">
+                        {item.label}
+                      </p>
 
                       {active && (
-                        <span className="ml-auto text-xs opacity-90">❤️</span>
+                        <p className="relative mt-1 text-xs opacity-90">
+                          selected ❤️
+                        </p>
                       )}
                     </Link>
                   );
                 })}
               </div>
-            </div>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
-    </nav>
+    </>
   );
 };
 
