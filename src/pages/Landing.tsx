@@ -13,38 +13,38 @@ import PageWrapper from "@/components/PageWrapper";
 const floatingItems = [
   {
     icon: "❤️",
-    top: "10%",
-    left: "5%",
+    top: "12%",
+    left: "4%",
     className: "hidden sm:block",
   },
   {
     icon: "💖",
-    top: "25%",
-    left: "18%",
+    top: "30%",
+    left: "9%",
     className: "hidden xl:block",
   },
   {
     icon: "💕",
-    top: "70%",
-    left: "7%",
-    className: "hidden md:block",
+    bottom: "14%",
+    left: "6%",
+    className: "hidden lg:block",
   },
   {
     icon: "✨",
-    top: "15%",
-    right: "10%",
+    top: "16%",
+    right: "7%",
     className: "hidden sm:block",
   },
   {
     icon: "🌸",
-    top: "72%",
+    bottom: "12%",
     right: "7%",
     className: "hidden xl:block",
   },
   {
     icon: "🎂",
-    top: "12%",
-    right: "25%",
+    top: "13%",
+    right: "24%",
     className: "hidden lg:block",
   },
 ];
@@ -53,12 +53,12 @@ const featureCards = [
   {
     title: "Love",
     icon: Heart,
-    iconClassName: "text-rose-500 fill-rose-500",
+    iconClassName: "fill-rose-500 text-rose-500",
   },
   {
     title: "Memories",
     icon: Star,
-    iconClassName: "text-pink-500 fill-pink-500",
+    iconClassName: "fill-pink-500 text-pink-500",
   },
   {
     title: "Surprise",
@@ -69,15 +69,27 @@ const featureCards = [
 
 const Landing = () => {
   return (
-    <PageWrapper className="relative min-h-dvh w-full overflow-x-hidden bg-gradient-to-br from-rose-50 via-pink-100 to-red-100">
+    <PageWrapper
+      className="
+        relative
+        min-h-dvh
+        w-full
+        overflow-x-hidden
+        bg-gradient-to-br
+        from-rose-50
+        via-pink-100
+        to-red-100
+        pt-20
+      "
+    >
       {/* Background glows */}
-      <div className="pointer-events-none absolute -left-24 -top-24 h-64 w-64 rounded-full bg-pink-300/35 blur-3xl sm:h-80 sm:w-80" />
+      <div className="pointer-events-none absolute -left-24 top-0 h-64 w-64 rounded-full bg-pink-300/35 blur-3xl sm:h-80 sm:w-80" />
 
-      <div className="pointer-events-none absolute -bottom-28 -right-28 h-72 w-72 rounded-full bg-rose-400/30 blur-3xl sm:h-96 sm:w-96" />
+      <div className="pointer-events-none absolute -bottom-28 -right-24 h-72 w-72 rounded-full bg-rose-400/25 blur-3xl sm:h-96 sm:w-96" />
 
       <div className="pointer-events-none absolute left-1/2 top-1/3 h-48 w-48 -translate-x-1/2 rounded-full bg-red-200/30 blur-3xl sm:h-64 sm:w-64" />
 
-      {/* Floating emojis */}
+      {/* Floating decorations */}
       {floatingItems.map((item, index) => (
         <motion.span
           key={`${item.icon}-${index}`}
@@ -87,9 +99,9 @@ const Landing = () => {
           }}
           animate={{
             y: [-5, -18, -5],
-            rotate: [-7, 8, -7],
+            rotate: [-6, 8, -6],
             opacity: [0.25, 0.85, 0.25],
-            scale: [0.9, 1.08, 0.9],
+            scale: [0.92, 1.08, 0.92],
           }}
           transition={{
             duration: 3.2 + index * 0.4,
@@ -100,6 +112,7 @@ const Landing = () => {
           className={`pointer-events-none absolute z-[1] text-xl sm:text-2xl lg:text-3xl ${item.className}`}
           style={{
             top: item.top,
+            bottom: item.bottom,
             left: item.left,
             right: item.right,
           }}
@@ -108,8 +121,23 @@ const Landing = () => {
         </motion.span>
       ))}
 
-      {/* Main area */}
-      <main className="relative z-10 flex min-h-dvh w-full items-center justify-center px-3 py-5 sm:px-5 sm:py-7 lg:px-8">
+      {/* Main page area */}
+      <main
+        className="
+          relative
+          z-10
+          flex
+          min-h-[calc(100dvh-5rem)]
+          w-full
+          items-center
+          justify-center
+          px-3
+          py-6
+          sm:px-5
+          sm:py-8
+          lg:px-8
+        "
+      >
         <motion.section
           initial={{
             opacity: 0,
@@ -157,7 +185,7 @@ const Landing = () => {
               py-7
               sm:px-7
               sm:py-9
-              lg:grid-cols-[minmax(0,1.1fr)_minmax(360px,0.9fr)]
+              lg:grid-cols-[minmax(0,1.08fr)_minmax(360px,0.92fr)]
               lg:gap-10
               lg:px-12
               lg:py-10
@@ -225,10 +253,10 @@ const Landing = () => {
                 className="
                   mt-4
                   font-display
+                  text-[clamp(2.3rem,4.6vw,5.3rem)]
                   font-extrabold
                   leading-[1]
                   tracking-tight
-                  text-[clamp(2.4rem,4.5vw,5.5rem)]
                 "
               >
                 <span className="block bg-gradient-to-r from-rose-500 via-pink-500 to-red-500 bg-clip-text text-transparent">
@@ -336,7 +364,7 @@ const Landing = () => {
                 })}
               </motion.div>
 
-              {/* Button */}
+              {/* Main button */}
               <motion.div
                 initial={{
                   opacity: 0,
@@ -351,7 +379,48 @@ const Landing = () => {
                 }}
                 className="mt-6"
               >
-                
+                <Link
+                  to="/birthday-wish"
+                  className="
+                    group
+                    inline-flex
+                    w-full
+                    items-center
+                    justify-center
+                    gap-2
+                    rounded-full
+                    bg-gradient-to-r
+                    from-rose-500
+                    to-pink-500
+                    px-5
+                    py-3.5
+                    font-body
+                    text-sm
+                    font-bold
+                    text-white
+                    shadow-lg
+                    shadow-rose-400/40
+                    transition-all
+                    duration-300
+                    hover:-translate-y-1
+                    hover:scale-[1.02]
+                    hover:shadow-xl
+                    hover:shadow-rose-500/45
+                    active:translate-y-0
+                    active:scale-[0.98]
+                    sm:w-auto
+                    sm:gap-3
+                    sm:px-8
+                    sm:py-4
+                    sm:text-base
+                  "
+                >
+                  <Gift className="h-5 w-5 shrink-0 transition-transform duration-300 group-hover:rotate-12" />
+
+                  <span>Start the Birthday Journey</span>
+
+                  <ArrowRight className="h-5 w-5 shrink-0 transition-transform duration-300 group-hover:translate-x-1" />
+                </Link>
               </motion.div>
             </div>
 
@@ -363,12 +432,12 @@ const Landing = () => {
                   flex
                   aspect-square
                   w-full
-                  max-w-[260px]
+                  max-w-[250px]
                   items-center
                   justify-center
-                  sm:max-w-[340px]
-                  lg:max-w-[430px]
-                  xl:max-w-[480px]
+                  sm:max-w-[330px]
+                  lg:max-w-[420px]
+                  xl:max-w-[460px]
                 "
               >
                 {/* Outer ring */}
@@ -384,7 +453,7 @@ const Landing = () => {
                   className="
                     pointer-events-none
                     absolute
-                    inset-[4%]
+                    inset-[3%]
                     rounded-full
                     border
                     border-rose-300/50
@@ -486,7 +555,7 @@ const Landing = () => {
                   }}
                   className="
                     absolute
-                    right-0
+                    right-[1%]
                     top-[8%]
                     z-20
                     hidden
@@ -508,7 +577,7 @@ const Landing = () => {
                   My favorite person
                 </motion.div>
 
-                {/* Mobile decorations */}
+                {/* Mobile decoration */}
                 <motion.span
                   animate={{
                     y: [-3, -10, -3],

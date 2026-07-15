@@ -1,323 +1,484 @@
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { AnimatePresence, motion } from "framer-motion";
 import {
-  X,
-  Heart,
-  Sparkles,
+  ArrowRight,
   Camera,
   ChevronLeft,
   ChevronRight,
+  Heart,
+  Sparkles,
   Star,
+  X,
 } from "lucide-react";
 import PageWrapper from "@/components/PageWrapper";
 
-const images = [
+interface MemoryImage {
+  src: string;
+  caption: string;
+  height: string;
+  rotate: string;
+  tag: string;
+}
+
+const images: MemoryImage[] = [
   {
     src: "/images/memories/photo1.jpg",
     caption: "One of my favorite memories ❤️",
-    height: "h-[340px]",
-    rotate: "-rotate-2",
+    height: "h-[280px] sm:h-[330px]",
+    rotate: "lg:-rotate-2",
     tag: "Favorite",
   },
   {
     src: "/images/memories/photo2.jpg",
     caption: "A beautiful day together",
-    height: "h-[220px]",
-    rotate: "rotate-2",
+    height: "h-[240px] sm:h-[270px]",
+    rotate: "lg:rotate-2",
     tag: "Sweet",
   },
   {
     src: "/images/memories/photo3.jpg",
     caption: "Moments I never want to forget",
-    height: "h-[230px]",
-    rotate: "-rotate-1",
+    height: "h-[250px] sm:h-[290px]",
+    rotate: "lg:-rotate-1",
     tag: "Special",
   },
   {
     src: "/images/memories/photo4.jpg",
     caption: "Just us being happy",
-    height: "h-[360px]",
-    rotate: "rotate-2",
+    height: "h-[290px] sm:h-[350px]",
+    rotate: "lg:rotate-2",
     tag: "Happy",
   },
   {
     src: "/images/memories/photo5.jpg",
     caption: "Another special memory",
-    height: "h-[220px]",
-    rotate: "-rotate-2",
+    height: "h-[240px] sm:h-[270px]",
+    rotate: "lg:-rotate-2",
     tag: "Cute",
   },
   {
     src: "/images/memories/photo6.jpg",
     caption: "Smiles that mean everything",
-    height: "h-[250px]",
-    rotate: "rotate-1",
+    height: "h-[260px] sm:h-[300px]",
+    rotate: "lg:rotate-1",
     tag: "Smile",
   },
   {
     src: "/images/memories/photo7.jpg",
     caption: "A memory close to my heart",
-    height: "h-[240px]",
-    rotate: "-rotate-1",
+    height: "h-[250px] sm:h-[290px]",
+    rotate: "lg:-rotate-1",
     tag: "Heart",
   },
   {
     src: "/images/memories/photo8.jpg",
     caption: "Laughing together forever",
-    height: "h-[240px]",
-    rotate: "rotate-2",
+    height: "h-[250px] sm:h-[290px]",
+    rotate: "lg:rotate-2",
     tag: "Laugh",
   },
   {
     src: "/images/memories/photo9.jpg",
     caption: "Forever my favorite person ❤️",
-    height: "h-[360px]",
-    rotate: "-rotate-2",
+    height: "h-[290px] sm:h-[350px]",
+    rotate: "lg:-rotate-2",
     tag: "Forever",
+  },
+];
+
+const floatingItems = [
+  {
+    icon: "❤️",
+    top: "8%",
+    left: "4%",
+    className: "hidden sm:block",
+  },
+  {
+    icon: "✨",
+    top: "20%",
+    right: "6%",
+    className: "hidden md:block",
+  },
+  {
+    icon: "💖",
+    top: "45%",
+    left: "4%",
+    className: "hidden lg:block",
+  },
+  {
+    icon: "🌸",
+    top: "63%",
+    right: "5%",
+    className: "hidden xl:block",
+  },
+  {
+    icon: "💕",
+    bottom: "12%",
+    left: "7%",
+    className: "hidden lg:block",
+  },
+  {
+    icon: "⭐",
+    bottom: "18%",
+    right: "8%",
+    className: "hidden md:block",
   },
 ];
 
 const MemoryGallery = () => {
   const [selected, setSelected] = useState<number | null>(null);
 
-  const handleNext = () => {
-    if (selected === null) return;
-    setSelected((selected + 1) % images.length);
+  const handleClose = () => {
+    setSelected(null);
   };
 
-  const handlePrev = () => {
-    if (selected === null) return;
-    setSelected((selected - 1 + images.length) % images.length);
+  const handleNext = () => {
+    setSelected((current) => {
+      if (current === null) return null;
+
+      return (current + 1) % images.length;
+    });
   };
+
+  const handlePrevious = () => {
+    setSelected((current) => {
+      if (current === null) return null;
+
+      return (current - 1 + images.length) % images.length;
+    });
+  };
+
+  useEffect(() => {
+    if (selected === null) {
+      document.body.style.overflowY = "auto";
+      return;
+    }
+
+    document.body.style.overflowY = "hidden";
+
+    const handleKeyboard = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        handleClose();
+      }
+
+      if (event.key === "ArrowRight") {
+        handleNext();
+      }
+
+      if (event.key === "ArrowLeft") {
+        handlePrevious();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyboard);
+
+    return () => {
+      document.body.style.overflowY = "auto";
+      window.removeEventListener("keydown", handleKeyboard);
+    };
+  }, [selected]);
 
   return (
-    <PageWrapper className="relative min-h-screen overflow-x-hidden bg-gradient-to-br from-rose-50 via-pink-100 to-red-100">
-      {/* Background Glow */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(244,114,182,0.24),transparent_35%),radial-gradient(circle_at_bottom_right,rgba(251,113,133,0.22),transparent_40%)]" />
-      <div className="absolute -top-32 -left-28 w-80 h-80 bg-pink-300/30 rounded-full blur-3xl" />
-      <div className="absolute top-1/2 -right-32 w-96 h-96 bg-rose-400/18 rounded-full blur-3xl" />
-      <div className="absolute -bottom-32 left-1/3 w-80 h-80 bg-red-300/18 rounded-full blur-3xl" />
+    <PageWrapper className="bg-gradient-to-br from-rose-50 via-pink-100 to-red-100">
+      {/* Full-page background */}
 
-      {/* Floating Decorations */}
-      {["❤️", "✨", "💖", "🌸", "💕", "⭐"].map((item, index) => (
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(244,114,182,0.24),transparent_35%),radial-gradient(circle_at_bottom_right,rgba(251,113,133,0.22),transparent_40%)]" />
+
+      <div className="pointer-events-none absolute -left-24 top-0 h-64 w-64 rounded-full bg-pink-300/30 blur-3xl sm:h-80 sm:w-80" />
+
+      <div className="pointer-events-none absolute -right-24 top-1/2 h-72 w-72 rounded-full bg-rose-400/20 blur-3xl sm:h-96 sm:w-96" />
+
+      <div className="pointer-events-none absolute bottom-0 left-1/3 h-64 w-64 rounded-full bg-red-300/20 blur-3xl sm:h-80 sm:w-80" />
+
+      {/* Floating decorations */}
+
+      {floatingItems.map((item, index) => (
         <motion.span
-          key={index}
-          initial={{ y: 0, opacity: 0.14 }}
+          key={`${item.icon}-${index}`}
+          initial={{
+            opacity: 0,
+            scale: 0.8,
+          }}
           animate={{
-            y: [-8, -28, -8],
-            opacity: [0.14, 0.65, 0.14],
+            y: [-6, -20, -6],
+            opacity: [0.15, 0.65, 0.15],
             rotate: [-8, 8, -8],
+            scale: [0.9, 1.08, 0.9],
           }}
           transition={{
-            duration: 3 + index * 0.5,
+            duration: 3.2 + index * 0.4,
             repeat: Infinity,
             delay: index * 0.25,
+            ease: "easeInOut",
           }}
-          className="absolute text-xl sm:text-3xl pointer-events-none"
+          className={`pointer-events-none absolute z-[1] text-xl sm:text-2xl lg:text-3xl ${item.className}`}
           style={{
-            top: `${10 + index * 13}%`,
-            left: `${7 + index * 15}%`,
+            top: item.top,
+            bottom: item.bottom,
+            left: item.left,
+            right: item.right,
           }}
         >
-          {item}
+          {item.icon}
         </motion.span>
       ))}
 
-      <div className="container mx-auto px-4 pt-16 pb-16 sm:pt-20 max-w-7xl relative z-10">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: -18 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-7"
-        >
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/55 backdrop-blur-md border border-white/70 shadow-md text-rose-600 text-xs sm:text-sm font-bold">
-            <Camera className="w-4 h-4" />
-            Our Little Memory Wall
-            <Sparkles className="w-4 h-4 text-pink-500" />
-          </div>
+      {/* Navbar space is reserved here */}
 
-          <h1 className="mt-3 text-4xl sm:text-6xl font-display font-extrabold leading-tight">
-            <span className="bg-gradient-to-r from-rose-500 via-pink-500 to-red-500 bg-clip-text text-transparent">
-              Memory Collage
-            </span>
-          </h1>
+      <main className="relative z-10 w-full min-w-0 px-3 pb-20 pt-28 sm:px-5 sm:pb-24 sm:pt-32 lg:px-8">
+        <div className="mx-auto w-full max-w-7xl">
+          {/* Header */}
 
-          <p className="mt-2 text-rose-700/75 font-body text-base sm:text-lg max-w-2xl mx-auto">
-            A tiny wall full of smiles, love, and beautiful memories that I want
-            to keep forever.
-          </p>
+          <motion.header
+            initial={{
+              opacity: 0,
+              y: -18,
+            }}
+            animate={{
+              opacity: 1,
+              y: 0,
+            }}
+            transition={{
+              duration: 0.6,
+              ease: "easeOut",
+            }}
+            className="mb-8 text-center sm:mb-10"
+          >
+            <div className="inline-flex max-w-full items-center justify-center gap-2 rounded-full border border-white/70 bg-white/60 px-3 py-2 text-[11px] font-bold text-rose-600 shadow-md backdrop-blur-md sm:px-4 sm:text-sm">
+              <Camera className="h-4 w-4 shrink-0" />
 
-          <div className="mt-5 flex flex-wrap justify-center gap-3">
-            <div className="px-4 py-2 rounded-full bg-white/50 backdrop-blur-md border border-white/70 text-rose-600 text-xs font-bold shadow-sm">
-              {images.length} Memories
+              <span className="truncate">Our Little Memory Wall</span>
+
+              <Sparkles className="h-4 w-4 shrink-0 text-pink-500" />
             </div>
-            <div className="px-4 py-2 rounded-full bg-white/50 backdrop-blur-md border border-white/70 text-rose-600 text-xs font-bold shadow-sm">
-              Endless Smiles
-            </div>
-            <div className="px-4 py-2 rounded-full bg-white/50 backdrop-blur-md border border-white/70 text-rose-600 text-xs font-bold shadow-sm">
-              Forever Us
-            </div>
-          </div>
-        </motion.div>
 
-        {/* Memory Board */}
-        <div className="relative rounded-[2.3rem] bg-white/24 backdrop-blur-md border border-white/55 shadow-2xl shadow-rose-300/20 px-4 py-7 sm:px-8 sm:py-9">
-          <div className="absolute top-5 left-7 text-2xl">💌</div>
-          <div className="absolute top-5 right-7 text-2xl">🎀</div>
-          <div className="absolute bottom-5 left-7 text-2xl">✨</div>
-          <div className="absolute bottom-5 right-7 text-2xl">❤️</div>
+            <h1 className="mt-4 font-display text-[clamp(2.4rem,6vw,4.7rem)] font-extrabold leading-none">
+              <span className="bg-gradient-to-r from-rose-500 via-pink-500 to-red-500 bg-clip-text text-transparent">
+                Memory Collage
+              </span>
+            </h1>
 
-          {/* Masonry Gallery */}
-          <div className="columns-1 sm:columns-2 lg:columns-3 gap-7 space-y-7">
-            {images.map((img, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 30, scale: 0.96 }}
-                whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                viewport={{ once: true, margin: "-60px" }}
-                transition={{
-                  delay: i * 0.06,
-                  type: "spring",
-                  stiffness: 90,
-                }}
-                whileHover={{
-                  y: -8,
-                  scale: 1.025,
-                  rotate: 0,
-                }}
-                onClick={() => setSelected(i)}
-                className={`group relative mb-7 break-inside-avoid cursor-pointer ${img.rotate}`}
-              >
-                {/* Tape */}
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-20 w-20 h-7 rotate-2 rounded-sm bg-pink-200/70 backdrop-blur-sm border border-white/70 shadow-sm" />
-
-                {/* Card */}
-                <div className="relative overflow-hidden rounded-[2rem] bg-white/72 border border-white/85 shadow-xl hover:shadow-rose-300/60 transition-all duration-300 p-2">
-                  <div
-                    className={`relative ${img.height} overflow-hidden rounded-[1.6rem]`}
-                  >
-                    <img
-                      src={img.src}
-                      alt={img.caption}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                    />
-
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/15 to-transparent" />
-
-                    <div className="absolute top-4 left-4 px-3 py-1.5 rounded-full bg-white/25 backdrop-blur-md border border-white/30 text-white text-xs font-bold">
-                      #{i + 1} {img.tag}
-                    </div>
-
-                    <motion.div
-                      animate={{ scale: [1, 1.12, 1] }}
-                      transition={{
-                        duration: 1.8,
-                        repeat: Infinity,
-                        delay: i * 0.15,
-                      }}
-                      className="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/25 backdrop-blur-md border border-white/25 flex items-center justify-center"
-                    >
-                      <Heart className="w-5 h-5 text-white fill-white" />
-                    </motion.div>
-
-                    <div className="absolute left-5 right-5 bottom-5">
-                      <p className="text-white font-body font-bold text-base sm:text-lg leading-snug drop-shadow">
-                        {img.caption}
-                      </p>
-
-                      <p className="mt-2 text-white/80 text-xs opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
-                        Tap to open this memory closely ✨
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="px-3 py-3 text-center">
-                    <p className="text-xs font-semibold text-rose-400">
-                      saved memory #{i + 1}
-                    </p>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-
-        {/* Bottom Note */}
-        <motion.div
-          initial={{ opacity: 0, y: 22 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="mt-10 text-center"
-        >
-          <div className="inline-block rounded-[2rem] bg-white/45 backdrop-blur-md border border-white/65 shadow-xl px-6 py-5">
-            <Star className="w-7 h-7 mx-auto text-rose-500 fill-rose-500" />
-            <p className="mt-3 text-rose-700 font-semibold max-w-xl">
-              These are not just photos. They are tiny pieces of us, saved in my
-              heart forever.
+            <p className="mx-auto mt-3 max-w-2xl text-sm leading-6 text-rose-700/75 sm:text-base sm:leading-7 lg:text-lg">
+              A tiny wall full of smiles, love, and beautiful memories that I
+              want to keep forever.
             </p>
-          </div>
-        </motion.div>
 
-        {/* Lightbox */}
-        <AnimatePresence>
-          {selected !== null && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm flex items-center justify-center px-4"
-              onClick={() => setSelected(null)}
-            >
-              <motion.div
-                initial={{ scale: 0.82, y: 40 }}
-                animate={{ scale: 1, y: 0 }}
-                exit={{ scale: 0.82, y: 40 }}
-                transition={{ type: "spring", stiffness: 130 }}
-                className="relative w-full max-w-5xl"
-                onClick={(e) => e.stopPropagation()}
-              >
-                <div className="relative rounded-[2rem] overflow-hidden bg-white p-3 shadow-2xl">
-                  <img
-                    src={images[selected].src}
-                    alt={images[selected].caption}
-                    className="w-full max-h-[76vh] object-contain rounded-[1.5rem]"
-                  />
+            <div className="mt-5 flex flex-wrap justify-center gap-2 sm:gap-3">
+              <span className="rounded-full border border-white/70 bg-white/55 px-4 py-2 text-xs font-bold text-rose-600 shadow-sm backdrop-blur-md">
+                {images.length} Memories
+              </span>
 
-                  <div className="px-4 py-4 text-center">
-                    <p className="text-rose-700 font-bold text-base sm:text-xl">
-                      {images[selected].caption}
-                    </p>
-                    <p className="mt-1 text-xs text-rose-400">
-                      saved memory #{selected + 1}
-                    </p>
+              <span className="rounded-full border border-white/70 bg-white/55 px-4 py-2 text-xs font-bold text-rose-600 shadow-sm backdrop-blur-md">
+                Endless Smiles
+              </span>
+
+              <span className="rounded-full border border-white/70 bg-white/55 px-4 py-2 text-xs font-bold text-rose-600 shadow-sm backdrop-blur-md">
+                Forever Us
+              </span>
+            </div>
+          </motion.header>
+
+          {/* Gallery board */}
+
+          <section className="relative w-full min-w-0 overflow-hidden rounded-[1.5rem] border border-white/60 bg-white/30 px-3 py-8 shadow-2xl shadow-rose-300/20 backdrop-blur-md sm:rounded-[2rem] sm:px-6 sm:py-10 lg:px-8">
+            <span className="pointer-events-none absolute left-5 top-5 hidden text-2xl sm:block">
+              💌
+            </span>
+
+            <span className="pointer-events-none absolute right-5 top-5 hidden text-2xl sm:block">
+              🎀
+            </span>
+
+            <span className="pointer-events-none absolute bottom-5 left-5 hidden text-2xl sm:block">
+              ✨
+            </span>
+
+            <span className="pointer-events-none absolute bottom-5 right-5 hidden text-2xl sm:block">
+              ❤️
+            </span>
+
+            <div className="columns-1 gap-5 sm:columns-2 sm:gap-6 lg:columns-3 lg:gap-7">
+              {images.map((image, index) => (
+                <motion.article
+                  key={image.src}
+                  initial={{
+                    opacity: 0,
+                    y: 28,
+                    scale: 0.97,
+                  }}
+                  whileInView={{
+                    opacity: 1,
+                    y: 0,
+                    scale: 1,
+                  }}
+                  viewport={{
+                    once: true,
+                    margin: "-40px",
+                  }}
+                  transition={{
+                    delay: index * 0.05,
+                    type: "spring",
+                    stiffness: 90,
+                    damping: 18,
+                  }}
+                  whileHover={{
+                    y: -6,
+                    scale: 1.015,
+                    rotate: 0,
+                  }}
+                  onClick={() => setSelected(index)}
+                  className={`group relative mb-5 min-w-0 break-inside-avoid cursor-pointer sm:mb-6 lg:mb-7 ${image.rotate}`}
+                >
+                  {/* Tape */}
+
+                  <div className="pointer-events-none absolute -top-3 left-1/2 z-20 h-6 w-16 -translate-x-1/2 rotate-2 rounded-sm border border-white/70 bg-pink-200/75 shadow-sm backdrop-blur-sm sm:h-7 sm:w-20" />
+
+                  {/* Memory card */}
+
+                  <div className="relative overflow-hidden rounded-[1.4rem] border border-white/85 bg-white/75 p-2 shadow-xl transition-all duration-300 hover:shadow-rose-300/50 sm:rounded-[2rem]">
+                    <div
+                      className={`relative w-full overflow-hidden rounded-[1.1rem] sm:rounded-[1.6rem] ${image.height}`}
+                    >
+                      <img
+                        src={image.src}
+                        alt={image.caption}
+                        loading="lazy"
+                        className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+                      />
+
+                      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/75 via-black/15 to-transparent" />
+
+                      <span className="absolute left-3 top-3 rounded-full border border-white/30 bg-white/25 px-3 py-1.5 text-[10px] font-bold text-white backdrop-blur-md sm:left-4 sm:top-4 sm:text-xs">
+                        #{index + 1} {image.tag}
+                      </span>
+
+                      <motion.div
+                        animate={{
+                          scale: [1, 1.12, 1],
+                        }}
+                        transition={{
+                          duration: 1.8,
+                          repeat: Infinity,
+                          delay: index * 0.15,
+                        }}
+                        className="absolute right-3 top-3 flex h-9 w-9 items-center justify-center rounded-full border border-white/25 bg-white/25 backdrop-blur-md sm:right-4 sm:top-4 sm:h-10 sm:w-10"
+                      >
+                        <Heart className="h-4 w-4 fill-white text-white sm:h-5 sm:w-5" />
+                      </motion.div>
+
+                      <div className="absolute bottom-4 left-4 right-4 sm:bottom-5 sm:left-5 sm:right-5">
+                        <p className="text-sm font-bold leading-snug text-white drop-shadow sm:text-base lg:text-lg">
+                          {image.caption}
+                        </p>
+
+                        <p className="mt-2 translate-y-2 text-[11px] text-white/80 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100 sm:text-xs">
+                          Tap to open this memory closely ✨
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="px-3 py-3 text-center">
+                      <p className="text-xs font-semibold text-rose-400">
+                        Saved memory #{index + 1}
+                      </p>
+                    </div>
                   </div>
+                </motion.article>
+              ))}
+            </div>
+          </section>
 
-                  <button
-                    onClick={() => setSelected(null)}
-                    className="absolute top-5 right-5 w-10 h-10 rounded-full bg-black/60 hover:bg-black/80 flex items-center justify-center transition-colors"
-                  >
-                    <X className="w-5 h-5 text-white" />
-                  </button>
+          
+        </div>
+      </main>
 
-                  <button
-                    onClick={handlePrev}
-                    className="absolute left-5 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-black/60 hover:bg-black/80 flex items-center justify-center transition-colors"
-                  >
-                    <ChevronLeft className="w-6 h-6 text-white" />
-                  </button>
+      {/* Lightbox */}
 
-                  <button
-                    onClick={handleNext}
-                    className="absolute right-5 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-black/60 hover:bg-black/80 flex items-center justify-center transition-colors"
-                  >
-                    <ChevronRight className="w-6 h-6 text-white" />
-                  </button>
+      <AnimatePresence>
+        {selected !== null && (
+          <motion.div
+            initial={{
+              opacity: 0,
+            }}
+            animate={{
+              opacity: 1,
+            }}
+            exit={{
+              opacity: 0,
+            }}
+            onClick={handleClose}
+            className="fixed inset-0 z-[100] flex w-full items-center justify-center overflow-y-auto overflow-x-hidden bg-black/85 px-3 py-5 backdrop-blur-sm sm:px-5"
+          >
+            <motion.div
+              initial={{
+                scale: 0.85,
+                y: 35,
+              }}
+              animate={{
+                scale: 1,
+                y: 0,
+              }}
+              exit={{
+                scale: 0.85,
+                y: 35,
+              }}
+              transition={{
+                type: "spring",
+                stiffness: 130,
+                damping: 18,
+              }}
+              onClick={(event) => event.stopPropagation()}
+              className="relative my-auto w-full max-w-5xl"
+            >
+              <div className="relative overflow-hidden rounded-[1.3rem] bg-white p-2 shadow-2xl sm:rounded-[2rem] sm:p-3">
+                <img
+                  src={images[selected].src}
+                  alt={images[selected].caption}
+                  className="h-auto max-h-[72dvh] w-full rounded-[1rem] object-contain sm:rounded-[1.5rem]"
+                />
+
+                <div className="px-4 py-4 text-center">
+                  <p className="text-sm font-bold text-rose-700 sm:text-lg lg:text-xl">
+                    {images[selected].caption}
+                  </p>
+
+                  <p className="mt-1 text-xs text-rose-400">
+                    Saved memory #{selected + 1} of {images.length}
+                  </p>
                 </div>
-              </motion.div>
+
+                <button
+                  type="button"
+                  onClick={handleClose}
+                  aria-label="Close image"
+                  className="absolute right-3 top-3 flex h-10 w-10 items-center justify-center rounded-full bg-black/60 text-white transition-colors hover:bg-black/80 sm:right-5 sm:top-5"
+                >
+                  <X className="h-5 w-5" />
+                </button>
+
+                <button
+                  type="button"
+                  onClick={handlePrevious}
+                  aria-label="View previous image"
+                  className="absolute left-3 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-black/60 text-white transition-colors hover:bg-black/80 sm:left-5 sm:h-11 sm:w-11"
+                >
+                  <ChevronLeft className="h-6 w-6" />
+                </button>
+
+                <button
+                  type="button"
+                  onClick={handleNext}
+                  aria-label="View next image"
+                  className="absolute right-3 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-black/60 text-white transition-colors hover:bg-black/80 sm:right-5 sm:h-11 sm:w-11"
+                >
+                  <ChevronRight className="h-6 w-6" />
+                </button>
+              </div>
             </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </PageWrapper>
   );
 };

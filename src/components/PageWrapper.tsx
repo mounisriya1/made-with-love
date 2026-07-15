@@ -1,23 +1,43 @@
 import { motion } from "framer-motion";
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
+
+interface PageWrapperProps {
+  children: ReactNode;
+  className?: string;
+}
 
 const PageWrapper = ({
   children,
   className = "",
-}: {
-  children: ReactNode;
-  className?: string;
-}) => {
+}: PageWrapperProps) => {
   return (
-    <motion.main
-      initial={{ opacity: 0, y: 14 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -14 }}
-      transition={{ duration: 0.35 }}
-      className={`w-full ${className}`}
+    <motion.div
+      initial={{
+        opacity: 0,
+      }}
+      animate={{
+        opacity: 1,
+      }}
+      exit={{
+        opacity: 0,
+      }}
+      transition={{
+        duration: 0.35,
+        ease: "easeOut",
+      }}
+      className={`
+        relative
+        isolate
+        w-full
+        min-w-0
+        min-h-screen
+        min-h-dvh
+        overflow-x-hidden
+        ${className}
+      `}
     >
       {children}
-    </motion.main>
+    </motion.div>
   );
 };
 

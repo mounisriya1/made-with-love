@@ -8,8 +8,10 @@ import {
   Gift,
   Crown,
   Star,
+  ArrowRight,
 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 import PageWrapper from "@/components/PageWrapper";
 import ConfettiEffect from "@/components/ConfettiEffect";
 
@@ -42,12 +44,12 @@ const BirthdayWish = () => {
 
   const floatingHearts = useMemo(
     () =>
-      Array.from({ length: 18 }, (_, i) => ({
-        id: i,
-        left: `${Math.random() * 100}%`,
-        delay: i * 0.35,
-        duration: 7 + Math.random() * 5,
-        size: 13 + Math.random() * 15,
+      Array.from({ length: 14 }, (_, index) => ({
+        id: index,
+        left: `${4 + Math.random() * 92}%`,
+        delay: index * 0.4,
+        duration: 7 + Math.random() * 4,
+        size: 12 + Math.random() * 12,
       })),
     []
   );
@@ -55,16 +57,18 @@ const BirthdayWish = () => {
   useEffect(() => {
     let index = 0;
 
-    const interval = setInterval(() => {
+    const interval = window.setInterval(() => {
       setTypedText(birthdayMessage.slice(0, index));
-      index++;
+      index += 1;
 
       if (index > birthdayMessage.length) {
-        clearInterval(interval);
+        window.clearInterval(interval);
       }
     }, 28);
 
-    return () => clearInterval(interval);
+    return () => {
+      window.clearInterval(interval);
+    };
   }, []);
 
   const handleBlowCandles = () => {
@@ -72,37 +76,52 @@ const BirthdayWish = () => {
   };
 
   const handleOpenLetter = (index: number) => {
-    if (!candlesBlown) return;
+    if (!candlesBlown || openedLetters.includes(index)) return;
 
-    if (!openedLetters.includes(index)) {
-      const updatedLetters = [...openedLetters, index];
-      setOpenedLetters(updatedLetters);
+    const updatedLetters = [...openedLetters, index];
+    setOpenedLetters(updatedLetters);
 
-      if (updatedLetters.length === surpriseLetters.length) {
-        setTimeout(() => {
-          setShowFinal(true);
-        }, 700);
-      }
+    if (updatedLetters.length === surpriseLetters.length) {
+      window.setTimeout(() => {
+        setShowFinal(true);
+      }, 700);
     }
   };
 
   return (
-    <PageWrapper className="relative h-[100dvh] overflow-hidden bg-gradient-to-br from-rose-50 via-pink-100 to-red-100">
+    <PageWrapper
+      className="
+        relative
+        min-h-dvh
+        w-full
+        overflow-x-hidden
+        bg-gradient-to-br
+        from-rose-50
+        via-pink-100
+        to-red-100
+        pt-20
+      "
+    >
       {showFinal && <ConfettiEffect />}
 
-      {/* Background Blobs */}
-      <div className="absolute -top-28 -left-24 w-72 h-72 bg-pink-300/40 rounded-full blur-3xl" />
-      <div className="absolute top-1/3 -right-28 w-80 h-80 bg-rose-400/30 rounded-full blur-3xl" />
-      <div className="absolute -bottom-28 left-1/3 w-72 h-72 bg-red-300/30 rounded-full blur-3xl" />
+      {/* Background glows */}
+      <div className="pointer-events-none absolute -left-24 top-0 h-64 w-64 rounded-full bg-pink-300/35 blur-3xl sm:h-72 sm:w-72" />
 
-      {/* Floating Hearts */}
-      <div className="absolute inset-0 pointer-events-none">
+      <div className="pointer-events-none absolute -right-24 top-1/3 h-72 w-72 rounded-full bg-rose-400/25 blur-3xl sm:h-80 sm:w-80" />
+
+      <div className="pointer-events-none absolute -bottom-24 left-1/3 h-64 w-64 rounded-full bg-red-300/25 blur-3xl sm:h-72 sm:w-72" />
+
+      {/* Floating hearts */}
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
         {floatingHearts.map((heart) => (
           <motion.span
             key={heart.id}
-            initial={{ y: 620, opacity: 0 }}
+            initial={{
+              y: "100vh",
+              opacity: 0,
+            }}
             animate={{
-              y: -120,
+              y: "-15vh",
               opacity: [0, 0.65, 0],
               rotate: [0, 20, -20, 0],
             }}
@@ -123,47 +142,194 @@ const BirthdayWish = () => {
         ))}
       </div>
 
-      <div className="relative z-10 h-full flex items-center justify-center px-4 py-3">
-        <motion.div
-          initial={{ opacity: 0, y: 28, scale: 0.96 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{ duration: 0.7 }}
-          className="relative w-full max-w-6xl rounded-[2rem] bg-white/55 backdrop-blur-xl border border-white/80 shadow-2xl shadow-rose-300/40 overflow-hidden"
+      {/* Main content */}
+      <main
+        className="
+          relative
+          z-10
+          flex
+          min-h-[calc(100dvh-5rem)]
+          w-full
+          items-center
+          justify-center
+          px-3
+          py-6
+          sm:px-5
+          sm:py-8
+          lg:px-8
+        "
+      >
+        <motion.section
+          initial={{
+            opacity: 0,
+            y: 26,
+            scale: 0.97,
+          }}
+          animate={{
+            opacity: 1,
+            y: 0,
+            scale: 1,
+          }}
+          transition={{
+            duration: 0.7,
+            ease: "easeOut",
+          }}
+          className="
+            relative
+            mx-auto
+            w-full
+            max-w-6xl
+            overflow-hidden
+            rounded-[1.5rem]
+            border
+            border-white/80
+            bg-white/60
+            shadow-2xl
+            shadow-rose-300/35
+            backdrop-blur-xl
+            sm:rounded-[2rem]
+          "
         >
-          <div className="absolute -top-20 -right-20 w-44 h-44 bg-pink-300/40 rounded-full blur-3xl" />
-          <div className="absolute -bottom-20 -left-20 w-44 h-44 bg-rose-300/40 rounded-full blur-3xl" />
+          {/* Card glows */}
+          <div className="pointer-events-none absolute -right-20 -top-20 h-44 w-44 rounded-full bg-pink-300/35 blur-3xl" />
 
-          <div className="relative grid lg:grid-cols-[0.85fr_1.15fr] gap-5 items-center px-5 py-5 sm:px-8 sm:py-7">
-            {/* Left Birthday Cake Universe */}
-            <div className="text-center">
+          <div className="pointer-events-none absolute -bottom-20 -left-20 h-44 w-44 rounded-full bg-rose-300/35 blur-3xl" />
+
+          <div
+            className="
+              relative
+              grid
+              grid-cols-1
+              items-center
+              gap-8
+              px-4
+              py-6
+              sm:px-7
+              sm:py-8
+              lg:grid-cols-[minmax(280px,0.85fr)_minmax(0,1.15fr)]
+              lg:gap-8
+              lg:px-9
+              lg:py-9
+              xl:px-12
+            "
+          >
+            {/* Left cake section */}
+            <div className="order-1 min-w-0 text-center">
               <motion.div
-                initial={{ opacity: 0, y: 18 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/70 border border-rose-200 text-rose-600 text-xs sm:text-sm font-bold shadow-md"
+                initial={{
+                  opacity: 0,
+                  y: 16,
+                }}
+                animate={{
+                  opacity: 1,
+                  y: 0,
+                }}
+                className="
+                  inline-flex
+                  max-w-full
+                  items-center
+                  justify-center
+                  gap-2
+                  rounded-full
+                  border
+                  border-rose-200
+                  bg-white/75
+                  px-3
+                  py-2
+                  text-[11px]
+                  font-bold
+                  text-rose-600
+                  shadow-md
+                  sm:px-4
+                  sm:text-sm
+                "
               >
-                <Crown className="w-4 h-4 text-rose-500" />
-                Birthday Universe
-                <Sparkles className="w-4 h-4 text-pink-500" />
+                <Crown className="h-4 w-4 shrink-0 text-rose-500" />
+
+                <span className="truncate">Birthday Universe</span>
+
+                <Sparkles className="h-4 w-4 shrink-0 text-pink-500" />
               </motion.div>
 
+              {/* Cake universe */}
               <motion.div
-                initial={{ scale: 0.75, rotate: -8 }}
-                animate={{ scale: 1, rotate: 0 }}
-                transition={{ delay: 0.25, type: "spring", stiffness: 120 }}
-                className="mx-auto mt-5 relative w-44 h-44 sm:w-56 sm:h-56 rounded-full bg-gradient-to-tr from-rose-300 via-pink-200 to-red-300 shadow-2xl flex items-center justify-center"
+                initial={{
+                  scale: 0.75,
+                  rotate: -8,
+                }}
+                animate={{
+                  scale: 1,
+                  rotate: 0,
+                }}
+                transition={{
+                  delay: 0.25,
+                  type: "spring",
+                  stiffness: 120,
+                }}
+                className="
+                  relative
+                  mx-auto
+                  mt-5
+                  flex
+                  aspect-square
+                  w-full
+                  max-w-[180px]
+                  items-center
+                  justify-center
+                  rounded-full
+                  bg-gradient-to-tr
+                  from-rose-300
+                  via-pink-200
+                  to-red-300
+                  shadow-2xl
+                  sm:max-w-[230px]
+                  lg:max-w-[250px]
+                "
               >
                 <motion.div
-                  animate={{ rotate: 360 }}
-                  transition={{ repeat: Infinity, duration: 16, ease: "linear" }}
-                  className="absolute inset-2 rounded-full border-2 border-dashed border-white/80"
+                  animate={{
+                    rotate: 360,
+                  }}
+                  transition={{
+                    repeat: Infinity,
+                    duration: 16,
+                    ease: "linear",
+                  }}
+                  className="
+                    pointer-events-none
+                    absolute
+                    inset-[5%]
+                    rounded-full
+                    border-2
+                    border-dashed
+                    border-white/80
+                  "
                 />
 
                 <motion.div
-                  animate={{ scale: [1, 1.06, 1] }}
-                  transition={{ repeat: Infinity, duration: 2 }}
-                  className="w-32 h-32 sm:w-40 sm:h-40 rounded-full bg-white/75 backdrop-blur-md border border-white shadow-xl flex flex-col items-center justify-center"
+                  animate={{
+                    scale: [1, 1.05, 1],
+                  }}
+                  transition={{
+                    repeat: Infinity,
+                    duration: 2,
+                  }}
+                  className="
+                    flex
+                    aspect-square
+                    w-[70%]
+                    flex-col
+                    items-center
+                    justify-center
+                    rounded-full
+                    border
+                    border-white
+                    bg-white/75
+                    shadow-xl
+                    backdrop-blur-md
+                  "
                 >
-                  <Cake className="w-14 h-14 sm:w-16 sm:h-16 text-rose-500" />
+                  <Cake className="h-12 w-12 text-rose-500 sm:h-16 sm:w-16" />
 
                   {!candlesBlown ? (
                     <motion.div
@@ -171,15 +337,24 @@ const BirthdayWish = () => {
                         scale: [1, 1.25, 1],
                         opacity: [1, 0.75, 1],
                       }}
-                      transition={{ repeat: Infinity, duration: 0.8 }}
+                      transition={{
+                        repeat: Infinity,
+                        duration: 0.8,
+                      }}
                     >
-                      <Flame className="w-7 h-7 text-orange-400 fill-orange-400" />
+                      <Flame className="h-6 w-6 fill-orange-400 text-orange-400 sm:h-7 sm:w-7" />
                     </motion.div>
                   ) : (
                     <motion.p
-                      initial={{ opacity: 0, scale: 0.5 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      className="text-3xl"
+                      initial={{
+                        opacity: 0,
+                        scale: 0.5,
+                      }}
+                      animate={{
+                        opacity: 1,
+                        scale: 1,
+                      }}
+                      className="text-2xl sm:text-3xl"
                     >
                       ✨
                     </motion.p>
@@ -197,13 +372,23 @@ const BirthdayWish = () => {
                       duration: 9 + index * 2,
                       ease: "linear",
                     }}
-                    className="absolute inset-0"
+                    className="pointer-events-none absolute inset-0"
                   >
                     <span
-                      className="absolute text-xl"
+                      className="absolute text-base sm:text-xl"
                       style={{
-                        top: index === 0 ? "4%" : index === 1 ? "50%" : "80%",
-                        left: index === 0 ? "50%" : index === 1 ? "4%" : "72%",
+                        top:
+                          index === 0
+                            ? "4%"
+                            : index === 1
+                            ? "50%"
+                            : "80%",
+                        left:
+                          index === 0
+                            ? "50%"
+                            : index === 1
+                            ? "4%"
+                            : "72%",
                       }}
                     >
                       {item}
@@ -213,89 +398,181 @@ const BirthdayWish = () => {
               </motion.div>
 
               <motion.button
+                type="button"
                 onClick={handleBlowCandles}
                 disabled={candlesBlown}
-                whileTap={{ scale: 0.95 }}
-                className="mt-5 inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-rose-500 to-pink-500 text-white font-bold shadow-lg shadow-rose-400/40 hover:scale-105 transition-all disabled:opacity-80"
+                whileTap={{
+                  scale: 0.95,
+                }}
+                className="
+                  mt-5
+                  inline-flex
+                  w-full
+                  max-w-[260px]
+                  items-center
+                  justify-center
+                  gap-2
+                  rounded-full
+                  bg-gradient-to-r
+                  from-rose-500
+                  to-pink-500
+                  px-5
+                  py-3
+                  text-sm
+                  font-bold
+                  text-white
+                  shadow-lg
+                  shadow-rose-400/40
+                  transition-all
+                  hover:scale-[1.03]
+                  disabled:cursor-default
+                  disabled:opacity-80
+                  sm:w-auto
+                  sm:px-6
+                "
               >
-                <Sparkles className="w-5 h-5" />
+                <Sparkles className="h-5 w-5" />
+
                 {candlesBlown ? "Magic Unlocked" : "Blow the Candle"}
               </motion.button>
 
-              <p className="mt-3 text-xs sm:text-sm text-rose-600/80 font-semibold">
+              <p className="mx-auto mt-3 max-w-sm text-xs font-semibold leading-5 text-rose-600/80 sm:text-sm">
                 Blow the candle first, then open the love letters 💌
               </p>
             </div>
 
-            {/* Right Content */}
-            <div className="text-center lg:text-left">
+            {/* Right content */}
+            <div className="order-2 min-w-0 text-center lg:text-left">
               <motion.h1
-                initial={{ opacity: 0, y: 24 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.35 }}
-                className="text-3xl sm:text-5xl md:text-6xl font-display font-extrabold leading-tight"
+                initial={{
+                  opacity: 0,
+                  y: 22,
+                }}
+                animate={{
+                  opacity: 1,
+                  y: 0,
+                }}
+                transition={{
+                  delay: 0.35,
+                }}
+                className="
+                  font-display
+                  text-[clamp(2rem,4.5vw,4.25rem)]
+                  font-extrabold
+                  leading-[1.05]
+                "
               >
                 <span className="bg-gradient-to-r from-rose-500 via-pink-500 to-red-500 bg-clip-text text-transparent">
                   Happy Birthday
                 </span>
-                <br />
-                <span className="text-rose-700">My Beautiful Love 🎂</span>
+
+                <span className="mt-1 block text-rose-700">
+                  My Beautiful Love 🎂
+                </span>
               </motion.h1>
 
+              {/* Typing message */}
               <motion.div
-                initial={{ opacity: 0, y: 22 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.65 }}
-                className="mt-4 rounded-2xl bg-white/50 backdrop-blur-md border border-white/70 shadow-xl px-4 py-4 sm:px-6 sm:py-5"
+                initial={{
+                  opacity: 0,
+                  y: 20,
+                }}
+                animate={{
+                  opacity: 1,
+                  y: 0,
+                }}
+                transition={{
+                  delay: 0.6,
+                }}
+                className="
+                  mt-4
+                  rounded-2xl
+                  border
+                  border-white/70
+                  bg-white/55
+                  px-4
+                  py-4
+                  shadow-xl
+                  backdrop-blur-md
+                  sm:px-6
+                  sm:py-5
+                "
               >
-                <p className="text-sm sm:text-lg font-body text-rose-900/80 leading-relaxed min-h-[90px]">
+                <p className="min-h-[78px] text-sm leading-6 text-rose-900/80 sm:min-h-[90px] sm:text-base sm:leading-7 lg:text-lg">
                   {typedText}
+
                   <span className="animate-pulse text-rose-500">|</span>
                 </p>
               </motion.div>
 
-              {/* Love Letter Cards */}
-              <div className="mt-5 grid sm:grid-cols-3 gap-3">
+              {/* Letter cards */}
+              <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-3">
                 {surpriseLetters.map((letter, index) => {
                   const isOpened = openedLetters.includes(index);
 
                   return (
                     <motion.button
                       key={letter.title}
+                      type="button"
                       onClick={() => handleOpenLetter(index)}
                       disabled={!candlesBlown}
-                      whileHover={candlesBlown ? { y: -5 } : {}}
-                      whileTap={candlesBlown ? { scale: 0.96 } : {}}
-                      className={`relative min-h-[125px] rounded-2xl border shadow-lg p-4 text-center transition-all overflow-hidden ${
-                        isOpened
-                          ? "bg-gradient-to-br from-rose-500 to-pink-500 text-white border-white/60"
-                          : candlesBlown
-                          ? "bg-white/70 text-rose-700 border-rose-100 hover:bg-rose-50"
-                          : "bg-white/40 text-rose-400 border-white/50 opacity-70"
-                      }`}
+                      whileHover={candlesBlown ? { y: -4 } : {}}
+                      whileTap={candlesBlown ? { scale: 0.97 } : {}}
+                      className={`
+                        relative
+                        min-h-[125px]
+                        min-w-0
+                        overflow-hidden
+                        rounded-2xl
+                        border
+                        p-4
+                        text-center
+                        shadow-lg
+                        transition-all
+                        sm:min-h-[150px]
+                        ${
+                          isOpened
+                            ? "border-white/60 bg-gradient-to-br from-rose-500 to-pink-500 text-white"
+                            : candlesBlown
+                            ? "border-rose-100 bg-white/75 text-rose-700 hover:bg-rose-50"
+                            : "border-white/50 bg-white/40 text-rose-400 opacity-70"
+                        }
+                      `}
                     >
-                      <div className="absolute -top-8 -right-8 w-20 h-20 bg-white/20 rounded-full blur-xl" />
+                      <div className="pointer-events-none absolute -right-8 -top-8 h-20 w-20 rounded-full bg-white/20 blur-xl" />
 
                       {!isOpened ? (
-                        <div className="h-full flex flex-col items-center justify-center">
-                          <Mail className="w-7 h-7 mb-2" />
-                          <p className="font-bold text-sm">
+                        <div className="flex h-full flex-col items-center justify-center">
+                          <Mail className="mb-2 h-7 w-7" />
+
+                          <p className="text-sm font-bold">
                             {candlesBlown ? "Open Letter" : "Locked"}
                           </p>
-                          <p className="text-xs mt-1 opacity-80">
+
+                          <p className="mt-1 text-xs opacity-80">
                             {letter.title}
                           </p>
                         </div>
                       ) : (
                         <motion.div
-                          initial={{ opacity: 0, rotateY: 90 }}
-                          animate={{ opacity: 1, rotateY: 0 }}
-                          transition={{ duration: 0.4 }}
+                          initial={{
+                            opacity: 0,
+                            rotateY: 90,
+                          }}
+                          animate={{
+                            opacity: 1,
+                            rotateY: 0,
+                          }}
+                          transition={{
+                            duration: 0.4,
+                          }}
                         >
                           <p className="text-2xl">{letter.icon}</p>
-                          <h3 className="mt-1 font-bold text-sm">
+
+                          <h3 className="mt-1 text-sm font-bold">
                             {letter.title}
                           </h3>
+
                           <p className="mt-2 text-xs leading-relaxed">
                             {letter.text}
                           </p>
@@ -306,49 +583,97 @@ const BirthdayWish = () => {
                 })}
               </div>
 
-              {/* Final Reveal */}
+              {/* Final reveal */}
               <AnimatePresence>
                 {showFinal && (
                   <motion.div
-                    initial={{ opacity: 0, y: 18, scale: 0.94 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ type: "spring", stiffness: 120 }}
-                    className="mt-5 rounded-3xl bg-gradient-to-r from-rose-500 via-pink-500 to-red-500 text-white px-5 py-4 shadow-xl shadow-rose-400/40"
+                    initial={{
+                      opacity: 0,
+                      y: 18,
+                      scale: 0.94,
+                    }}
+                    animate={{
+                      opacity: 1,
+                      y: 0,
+                      scale: 1,
+                    }}
+                    exit={{
+                      opacity: 0,
+                    }}
+                    transition={{
+                      type: "spring",
+                      stiffness: 120,
+                    }}
+                    className="
+                      mt-5
+                      rounded-3xl
+                      bg-gradient-to-r
+                      from-rose-500
+                      via-pink-500
+                      to-red-500
+                      px-4
+                      py-4
+                      text-white
+                      shadow-xl
+                      shadow-rose-400/40
+                      sm:px-5
+                    "
                   >
-                    <div className="flex items-center justify-center lg:justify-start gap-2">
-                      <Gift className="w-5 h-5" />
-                      <p className="font-bold">Final Surprise Unlocked</p>
-                      <Star className="w-5 h-5 fill-white" />
+                    <div className="flex items-center justify-center gap-2 lg:justify-start">
+                      <Gift className="h-5 w-5" />
+
+                      <p className="font-bold">
+                        Final Surprise Unlocked
+                      </p>
+
+                      <Star className="h-5 w-5 fill-white" />
                     </div>
 
-                    <p className="mt-2 text-sm sm:text-base leading-relaxed">
+                    <p className="mt-2 text-sm leading-relaxed sm:text-base">
                       No matter where life takes us, you will always have a
                       special place in my heart. Today, tomorrow, and always —
                       you are my favorite birthday boy ❤️
                     </p>
 
                     <motion.div
-                      animate={{ scale: [1, 1.08, 1] }}
-                      transition={{ repeat: Infinity, duration: 1.5 }}
-                      className="mt-3 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/20 text-sm font-bold"
+                      animate={{
+                        scale: [1, 1.06, 1],
+                      }}
+                      transition={{
+                        repeat: Infinity,
+                        duration: 1.5,
+                      }}
+                      className="
+                        mt-3
+                        inline-flex
+                        items-center
+                        gap-2
+                        rounded-full
+                        bg-white/20
+                        px-4
+                        py-2
+                        text-sm
+                        font-bold
+                      "
                     >
-                      <Heart className="w-4 h-4 fill-white" />
+                      <Heart className="h-4 w-4 fill-white" />
                       I love you endlessly
                     </motion.div>
+
+                    
                   </motion.div>
                 )}
               </AnimatePresence>
 
               {!showFinal && (
-                <p className="mt-4 text-sm sm:text-base text-rose-700 italic">
+                <p className="mt-4 text-sm italic text-rose-700 sm:text-base">
                   Open all three letters to reveal the final surprise ❤️
                 </p>
               )}
             </div>
           </div>
-        </motion.div>
-      </div>
+        </motion.section>
+      </main>
     </PageWrapper>
   );
 };

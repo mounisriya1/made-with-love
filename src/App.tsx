@@ -17,7 +17,6 @@ import BirthdayWish from "@/pages/BirthdayWish";
 import LoveCounterPage from "@/pages/LoveCounterPage";
 import SecretSurprise from "@/pages/SecretSurprise";
 import MiniLoveQuizPage from "@/pages/MiniLoveQuizPage";
-import CuteCertificatePage from "@/pages/CuteCertificatePage";
 
 import NotFound from "@/pages/NotFound";
 
@@ -58,7 +57,7 @@ const AppRoutes = () => {
           <Route path="/love-counter" element={<LoveCounterPage />} />
           <Route path="/surprise" element={<SecretSurprise />} />
           <Route path="/love-quiz" element={<MiniLoveQuizPage />} />
-          <Route path="/certificate" element={<CuteCertificatePage />} />
+          
           <Route path="*" element={<NotFound />} />
         </Routes>
       </AnimatePresence>
