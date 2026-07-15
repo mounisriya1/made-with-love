@@ -1,4 +1,9 @@
-import { useCallback, useEffect, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
+import type { ReactNode } from "react";
 import {
   BrowserRouter,
   Navigate,
@@ -6,7 +11,10 @@ import {
   Routes,
   useLocation,
 } from "react-router-dom";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import {
+  QueryClient,
+  QueryClientProvider,
+} from "@tanstack/react-query";
 import { AnimatePresence } from "framer-motion";
 
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -28,6 +36,8 @@ import SecretSurprise from "@/pages/SecretSurprise";
 import WelcomeLock from "@/pages/WelcomeLock";
 
 const queryClient = new QueryClient();
+
+const UNLOCK_STORAGE_KEY = "birthdayUnlocked";
 
 const protectedPaths = [
   "/home",
@@ -52,19 +62,26 @@ const ScrollToTop = () => {
   return null;
 };
 
+interface ProtectedPageProps {
+  children: ReactNode;
+}
+
 const ProtectedPage = ({
   children,
-}: {
-  children: React.ReactNode;
-}) => {
-  return <ProtectedRoute>{children}</ProtectedRoute>;
+}: ProtectedPageProps) => {
+  return (
+    <ProtectedRoute>
+      {children}
+    </ProtectedRoute>
+  );
 };
 
 const AppRoutes = () => {
   const location = useLocation();
 
-  const isLockScreen = location.pathname === "/";
-  const isProtectedPage = protectedPaths.includes(location.pathname);
+  const isProtectedPage = protectedPaths.includes(
+    location.pathname
+  );
 
   return (
     <>
@@ -75,9 +92,17 @@ const AppRoutes = () => {
       {isProtectedPage && <MusicControl />}
 
       <AnimatePresence mode="wait">
-        <Routes location={location} key={location.pathname}>
-          <Route path="/" element={<WelcomeLock />} />
+        <Routes
+          location={location}
+          key={location.pathname}
+        >
+          {/* Welcome Lock */}
+          <Route
+            path="/"
+            element={<WelcomeLock />}
+          />
 
+          {/* Home */}
           <Route
             path="/home"
             element={
@@ -87,6 +112,7 @@ const AppRoutes = () => {
             }
           />
 
+          {/* Birthday Wish */}
           <Route
             path="/birthday-wish"
             element={
@@ -96,6 +122,7 @@ const AppRoutes = () => {
             }
           />
 
+          {/* Gallery */}
           <Route
             path="/gallery"
             element={
@@ -105,6 +132,7 @@ const AppRoutes = () => {
             }
           />
 
+          {/* Love Counter */}
           <Route
             path="/love-counter"
             element={
@@ -114,6 +142,7 @@ const AppRoutes = () => {
             }
           />
 
+          {/* Secret Surprise */}
           <Route
             path="/surprise"
             element={
@@ -123,6 +152,7 @@ const AppRoutes = () => {
             }
           />
 
+          {/* Love Quiz */}
           <Route
             path="/love-quiz"
             element={
@@ -132,13 +162,20 @@ const AppRoutes = () => {
             }
           />
 
-          
-
-          <Route path="/404" element={<NotFound />} />
+          {/* Not Found */}
+          <Route
+            path="/404"
+            element={<NotFound />}
+          />
 
           <Route
             path="*"
-            element={<Navigate to="/404" replace />}
+            element={
+              <Navigate
+                to="/404"
+                replace
+              />
+            }
           />
         </Routes>
       </AnimatePresence>
@@ -150,6 +187,29 @@ const App = () => {
   const [loaded, setLoaded] = useState(false);
 
   const handleLoaded = useCallback(() => {
+    const navigationEntry =
+      performance.getEntriesByType(
+        "navigation"
+      )[0] as PerformanceNavigationTiming | undefined;
+
+    const navigationType =
+      navigationEntry?.type;
+
+    /*
+      Fresh website opening:
+      Clear the previous unlock value so the
+      Welcome Lock appears.
+
+      Browser refresh:
+      Keep the unlock value so the user remains
+      on the same current page.
+    */
+    if (navigationType !== "reload") {
+      sessionStorage.removeItem(
+        UNLOCK_STORAGE_KEY
+      );
+    }
+
     setLoaded(true);
   }, []);
 
@@ -158,7 +218,11 @@ const App = () => {
       <TooltipProvider>
         <Sonner />
 
-        {!loaded && <LoadingScreen onComplete={handleLoaded} />}
+        {!loaded && (
+          <LoadingScreen
+            onComplete={handleLoaded}
+          />
+        )}
 
         {loaded && (
           <BrowserRouter>

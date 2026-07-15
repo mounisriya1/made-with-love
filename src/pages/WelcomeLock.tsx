@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   Delete,
   Heart,
@@ -63,13 +63,8 @@ const floatingItems = [
   },
 ];
 
-interface LocationState {
-  from?: string;
-}
-
 const WelcomeLock = () => {
   const navigate = useNavigate();
-  const location = useLocation();
 
   const redirectTimerRef = useRef<number | null>(null);
   const errorTimerRef = useRef<number | null>(null);
@@ -78,20 +73,6 @@ const WelcomeLock = () => {
   const [error, setError] = useState("");
   const [isSuccess, setIsSuccess] = useState(false);
   const [shakeCard, setShakeCard] = useState(false);
-
-  useEffect(() => {
-    const isAlreadyUnlocked =
-      sessionStorage.getItem(UNLOCK_STORAGE_KEY) === "true";
-
-    if (isAlreadyUnlocked) {
-      const state = location.state as LocationState | null;
-      const destination = state?.from || "/home";
-
-      navigate(destination, {
-        replace: true,
-      });
-    }
-  }, [location.state, navigate]);
 
   useEffect(() => {
     return () => {
@@ -154,13 +135,13 @@ const WelcomeLock = () => {
       setError("");
       setIsSuccess(true);
 
-      sessionStorage.setItem(UNLOCK_STORAGE_KEY, "true");
-
-      const state = location.state as LocationState | null;
-      const destination = state?.from || "/home";
+      sessionStorage.setItem(
+        UNLOCK_STORAGE_KEY,
+        "true"
+      );
 
       redirectTimerRef.current = window.setTimeout(() => {
-        navigate(destination, {
+        navigate("/home", {
           replace: true,
         });
       }, 1000);

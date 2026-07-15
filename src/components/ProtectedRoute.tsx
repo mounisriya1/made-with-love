@@ -1,5 +1,8 @@
 import type { ReactNode } from "react";
-import { Navigate, useLocation } from "react-router-dom";
+import {
+  Navigate,
+  useLocation,
+} from "react-router-dom";
 
 interface ProtectedRouteProps {
   children: ReactNode;
@@ -11,7 +14,9 @@ const ProtectedRoute = ({
   const location = useLocation();
 
   const isUnlocked =
-    sessionStorage.getItem("birthdayUnlocked") === "true";
+    sessionStorage.getItem(
+      "birthdayUnlocked"
+    ) === "true";
 
   if (!isUnlocked) {
     return (
