@@ -1,213 +1,548 @@
 import { Link } from "react-router-dom";
-import { Gift, Heart, Sparkles, Star, Crown } from "lucide-react";
+import {
+  ArrowRight,
+  Crown,
+  Gift,
+  Heart,
+  Sparkles,
+  Star,
+} from "lucide-react";
 import { motion } from "framer-motion";
 import PageWrapper from "@/components/PageWrapper";
 
-const floatingItems = ["❤️", "💖", "💕", "✨", "🌸", "🎂"];
+const floatingItems = [
+  {
+    icon: "❤️",
+    top: "10%",
+    left: "5%",
+    className: "hidden sm:block",
+  },
+  {
+    icon: "💖",
+    top: "25%",
+    left: "18%",
+    className: "hidden xl:block",
+  },
+  {
+    icon: "💕",
+    top: "70%",
+    left: "7%",
+    className: "hidden md:block",
+  },
+  {
+    icon: "✨",
+    top: "15%",
+    right: "10%",
+    className: "hidden sm:block",
+  },
+  {
+    icon: "🌸",
+    top: "72%",
+    right: "7%",
+    className: "hidden xl:block",
+  },
+  {
+    icon: "🎂",
+    top: "12%",
+    right: "25%",
+    className: "hidden lg:block",
+  },
+];
 
-const loveNotes = [
-  "My favorite person",
-  "My safe place",
-  "My forever smile",
+const featureCards = [
+  {
+    title: "Love",
+    icon: Heart,
+    iconClassName: "text-rose-500 fill-rose-500",
+  },
+  {
+    title: "Memories",
+    icon: Star,
+    iconClassName: "text-pink-500 fill-pink-500",
+  },
+  {
+    title: "Surprise",
+    icon: Gift,
+    iconClassName: "text-red-500",
+  },
 ];
 
 const Landing = () => {
   return (
-    <PageWrapper className="relative h-[100dvh] overflow-hidden bg-gradient-to-br from-rose-50 via-pink-100 to-red-100">
-      {/* Background Glow */}
-      <div className="absolute -top-28 -left-28 w-72 h-72 bg-pink-300/40 rounded-full blur-3xl" />
-      <div className="absolute -bottom-28 -right-28 w-80 h-80 bg-rose-400/30 rounded-full blur-3xl" />
-      <div className="absolute top-1/3 left-1/2 w-56 h-56 bg-red-200/40 rounded-full blur-3xl" />
+    <PageWrapper className="relative min-h-dvh w-full overflow-x-hidden bg-gradient-to-br from-rose-50 via-pink-100 to-red-100">
+      {/* Background glows */}
+      <div className="pointer-events-none absolute -left-24 -top-24 h-64 w-64 rounded-full bg-pink-300/35 blur-3xl sm:h-80 sm:w-80" />
 
-      {/* Floating Items */}
+      <div className="pointer-events-none absolute -bottom-28 -right-28 h-72 w-72 rounded-full bg-rose-400/30 blur-3xl sm:h-96 sm:w-96" />
+
+      <div className="pointer-events-none absolute left-1/2 top-1/3 h-48 w-48 -translate-x-1/2 rounded-full bg-red-200/30 blur-3xl sm:h-64 sm:w-64" />
+
+      {/* Floating emojis */}
       {floatingItems.map((item, index) => (
         <motion.span
-          key={index}
-          initial={{ y: 0, opacity: 0.35 }}
+          key={`${item.icon}-${index}`}
+          initial={{
+            opacity: 0,
+            scale: 0.8,
+          }}
           animate={{
-            y: [-8, -28, -8],
-            opacity: [0.35, 1, 0.35],
-            rotate: [-5, 8, -5],
+            y: [-5, -18, -5],
+            rotate: [-7, 8, -7],
+            opacity: [0.25, 0.85, 0.25],
+            scale: [0.9, 1.08, 0.9],
           }}
           transition={{
-            duration: 3 + index * 0.4,
+            duration: 3.2 + index * 0.4,
+            delay: index * 0.25,
             repeat: Infinity,
-            delay: index * 0.3,
+            ease: "easeInOut",
           }}
-          className="absolute text-lg sm:text-3xl pointer-events-none"
+          className={`pointer-events-none absolute z-[1] text-xl sm:text-2xl lg:text-3xl ${item.className}`}
           style={{
-            top: `${8 + index * 13}%`,
-            left: `${6 + index * 16}%`,
+            top: item.top,
+            left: item.left,
+            right: item.right,
           }}
         >
-          {item}
+          {item.icon}
         </motion.span>
       ))}
 
-      <div className="relative z-10 h-full flex items-center justify-center px-4 py-3">
-        <motion.div
-          initial={{ opacity: 0, y: 30, scale: 0.96 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{ duration: 0.7 }}
-          className="relative w-full max-w-5xl rounded-[2rem] bg-white/55 backdrop-blur-xl border border-white/80 shadow-2xl shadow-rose-300/40 overflow-hidden"
+      {/* Main area */}
+      <main className="relative z-10 flex min-h-dvh w-full items-center justify-center px-3 py-5 sm:px-5 sm:py-7 lg:px-8">
+        <motion.section
+          initial={{
+            opacity: 0,
+            y: 28,
+            scale: 0.97,
+          }}
+          animate={{
+            opacity: 1,
+            y: 0,
+            scale: 1,
+          }}
+          transition={{
+            duration: 0.7,
+            ease: "easeOut",
+          }}
+          className="
+            relative
+            mx-auto
+            w-full
+            max-w-[1400px]
+            overflow-hidden
+            rounded-[1.5rem]
+            border
+            border-white/80
+            bg-white/60
+            shadow-2xl
+            shadow-rose-300/30
+            backdrop-blur-xl
+            sm:rounded-[2rem]
+          "
         >
-          {/* Decorative corner */}
-          <div className="absolute -top-16 -right-16 w-40 h-40 bg-pink-300/40 rounded-full blur-2xl" />
-          <div className="absolute -bottom-16 -left-16 w-40 h-40 bg-rose-300/40 rounded-full blur-2xl" />
+          {/* Card decorations */}
+          <div className="pointer-events-none absolute -right-20 -top-20 h-48 w-48 rounded-full bg-pink-300/25 blur-2xl" />
 
-          <div className="relative grid md:grid-cols-2 gap-4 items-center px-5 py-5 sm:px-8 sm:py-7">
-            {/* Left Content */}
-            <div className="text-center md:text-left">
+          <div className="pointer-events-none absolute -bottom-20 -left-20 h-48 w-48 rounded-full bg-rose-300/25 blur-2xl" />
+
+          <div
+            className="
+              relative
+              grid
+              grid-cols-1
+              items-center
+              gap-8
+              px-4
+              py-7
+              sm:px-7
+              sm:py-9
+              lg:grid-cols-[minmax(0,1.1fr)_minmax(360px,0.9fr)]
+              lg:gap-10
+              lg:px-12
+              lg:py-10
+              xl:px-16
+              xl:py-12
+            "
+          >
+            {/* Left content */}
+            <div className="order-2 min-w-0 text-center lg:order-1 lg:text-left">
+              {/* Badge */}
               <motion.div
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 }}
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/70 border border-rose-200 text-rose-600 text-xs sm:text-sm font-bold shadow-md"
+                initial={{
+                  opacity: 0,
+                  y: 12,
+                }}
+                animate={{
+                  opacity: 1,
+                  y: 0,
+                }}
+                transition={{
+                  delay: 0.15,
+                }}
+                className="
+                  inline-flex
+                  max-w-full
+                  items-center
+                  justify-center
+                  gap-2
+                  rounded-full
+                  border
+                  border-rose-200
+                  bg-white/80
+                  px-3
+                  py-2
+                  text-[10px]
+                  font-extrabold
+                  text-rose-600
+                  shadow-md
+                  sm:px-4
+                  sm:text-sm
+                "
               >
-                <Crown className="w-4 h-4 text-rose-500" />
-                Birthday Mission Unlocked
-                <Sparkles className="w-4 h-4 text-pink-500" />
+                <Crown className="h-4 w-4 shrink-0 text-rose-500" />
+
+                <span className="truncate">
+                  Birthday Mission Unlocked
+                </span>
+
+                <Sparkles className="h-4 w-4 shrink-0 text-pink-500" />
               </motion.div>
 
+              {/* Heading */}
               <motion.h1
-                initial={{ opacity: 0, y: 22 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.35 }}
-                className="mt-4 text-4xl sm:text-5xl md:text-6xl font-display font-extrabold leading-tight"
+                initial={{
+                  opacity: 0,
+                  y: 18,
+                }}
+                animate={{
+                  opacity: 1,
+                  y: 0,
+                }}
+                transition={{
+                  delay: 0.3,
+                }}
+                className="
+                  mt-4
+                  font-display
+                  font-extrabold
+                  leading-[1]
+                  tracking-tight
+                  text-[clamp(2.4rem,4.5vw,5.5rem)]
+                "
               >
-                <span className="bg-gradient-to-r from-rose-500 via-pink-500 to-red-500 bg-clip-text text-transparent">
+                <span className="block bg-gradient-to-r from-rose-500 via-pink-500 to-red-500 bg-clip-text text-transparent">
                   Happy Birthday
                 </span>
-                <br />
-                <span className="text-rose-700">My Love ❤️</span>
+
+                <span className="mt-2 block text-rose-700">
+                  My Love{" "}
+                  <span className="inline-block align-middle text-[0.82em]">
+                    ❤️
+                  </span>
+                </span>
               </motion.h1>
 
+              {/* Description */}
               <motion.p
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.55 }}
-                className="mt-4 text-sm sm:text-base md:text-lg text-rose-700/80 font-body max-w-xl leading-relaxed mx-auto md:mx-0"
+                initial={{
+                  opacity: 0,
+                }}
+                animate={{
+                  opacity: 1,
+                }}
+                transition={{
+                  delay: 0.48,
+                }}
+                className="
+                  mx-auto
+                  mt-5
+                  max-w-2xl
+                  font-body
+                  text-sm
+                  leading-6
+                  text-rose-700/80
+                  sm:text-base
+                  sm:leading-7
+                  lg:mx-0
+                  lg:text-lg
+                  lg:leading-8
+                "
               >
-                Today is not just your birthday. It is a whole little world made
-                for you with memories, love, smiles, and surprises waiting to be
-                opened one by one.
+                Today is not just your birthday. It is a whole little world
+                made for you with memories, love, smiles, and surprises waiting
+                to be opened one by one.
               </motion.p>
 
-              {/* Mini Cards */}
+              {/* Feature cards */}
               <motion.div
-                initial={{ opacity: 0, y: 18 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.75 }}
-                className="mt-5 grid grid-cols-3 gap-2 sm:gap-3"
+                initial={{
+                  opacity: 0,
+                  y: 15,
+                }}
+                animate={{
+                  opacity: 1,
+                  y: 0,
+                }}
+                transition={{
+                  delay: 0.65,
+                }}
+                className="
+                  mx-auto
+                  mt-6
+                  grid
+                  w-full
+                  max-w-md
+                  grid-cols-3
+                  gap-2
+                  sm:gap-3
+                  lg:mx-0
+                "
               >
-                <div className="rounded-2xl bg-white/70 border border-rose-100 p-3 text-center shadow-md">
-                  <Heart className="w-5 h-5 mx-auto text-rose-500 fill-rose-500" />
-                  <p className="mt-1 text-[10px] sm:text-xs text-rose-600 font-bold">
-                    Love
-                  </p>
-                </div>
+                {featureCards.map((feature) => {
+                  const Icon = feature.icon;
 
-                <div className="rounded-2xl bg-white/70 border border-rose-100 p-3 text-center shadow-md">
-                  <Star className="w-5 h-5 mx-auto text-pink-500 fill-pink-500" />
-                  <p className="mt-1 text-[10px] sm:text-xs text-rose-600 font-bold">
-                    Memories
-                  </p>
-                </div>
+                  return (
+                    <div
+                      key={feature.title}
+                      className="
+                        min-w-0
+                        rounded-xl
+                        border
+                        border-rose-100
+                        bg-white/75
+                        px-2
+                        py-3
+                        text-center
+                        shadow-md
+                        transition-all
+                        duration-300
+                        hover:-translate-y-1
+                        hover:bg-white/90
+                        sm:rounded-2xl
+                        sm:px-3
+                        sm:py-4
+                      "
+                    >
+                      <Icon
+                        className={`mx-auto h-5 w-5 sm:h-6 sm:w-6 ${feature.iconClassName}`}
+                      />
 
-                <div className="rounded-2xl bg-white/70 border border-rose-100 p-3 text-center shadow-md">
-                  <Gift className="w-5 h-5 mx-auto text-red-500" />
-                  <p className="mt-1 text-[10px] sm:text-xs text-rose-600 font-bold">
-                    Surprise
-                  </p>
-                </div>
+                      <p className="mt-1 truncate text-[10px] font-bold text-rose-600 sm:text-xs">
+                        {feature.title}
+                      </p>
+                    </div>
+                  );
+                })}
               </motion.div>
 
+              {/* Button */}
               <motion.div
-                initial={{ opacity: 0, y: 22 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.95 }}
-                className="mt-5"
+                initial={{
+                  opacity: 0,
+                  y: 18,
+                }}
+                animate={{
+                  opacity: 1,
+                  y: 0,
+                }}
+                transition={{
+                  delay: 0.82,
+                }}
+                className="mt-6"
               >
-                <Link
-                  to="/surprise"
-                  className="group inline-flex items-center gap-3 px-7 py-3 sm:px-8 sm:py-4 rounded-full bg-gradient-to-r from-rose-500 to-pink-500 text-white font-body font-bold shadow-lg shadow-rose-400/40 hover:shadow-xl hover:shadow-rose-500/50 hover:scale-105 transition-all duration-300"
-                >
-                  <Gift className="w-5 h-5 group-hover:rotate-12 transition-transform" />
-                  Open Birthday Surprise
-                  <span className="text-xl">🎁</span>
-                </Link>
+                
               </motion.div>
             </div>
 
-            {/* Right Photo Section */}
-            <div className="relative flex items-center justify-center mt-3 md:mt-0">
-              <motion.div
-                animate={{ rotate: 360 }}
-                transition={{
-                  duration: 18,
-                  repeat: Infinity,
-                  ease: "linear",
-                }}
-                className="absolute w-56 h-56 sm:w-64 sm:h-64 md:w-72 md:h-72 rounded-full border-2 border-dashed border-rose-300"
-              />
-
-              <motion.div
-                initial={{ opacity: 0, scale: 0.75, rotate: -6 }}
-                animate={{ opacity: 1, scale: 1, rotate: 0 }}
-                transition={{
-                  delay: 0.55,
-                  type: "spring",
-                  stiffness: 120,
-                }}
-                className="relative w-44 h-44 sm:w-56 sm:h-56 md:w-64 md:h-64 rounded-full"
+            {/* Right image section */}
+            <div className="order-1 flex min-w-0 items-center justify-center lg:order-2">
+              <div
+                className="
+                  relative
+                  flex
+                  aspect-square
+                  w-full
+                  max-w-[260px]
+                  items-center
+                  justify-center
+                  sm:max-w-[340px]
+                  lg:max-w-[430px]
+                  xl:max-w-[480px]
+                "
               >
-                <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-rose-400 via-pink-300 to-red-400 blur-xl opacity-70 animate-pulse" />
-
-                <div className="relative w-full h-full rounded-full p-2 bg-gradient-to-tr from-rose-400 via-pink-300 to-red-400 shadow-2xl">
-                  <div className="w-full h-full rounded-full overflow-hidden border-4 border-white">
-                    <img
-                      src="/images/Couple1.jpg"
-                      alt="Our Photo"
-                      className="w-full h-full object-cover hover:scale-110 transition-transform duration-700"
-                    />
-                  </div>
-                </div>
-              </motion.div>
-
-              {/* Floating Love Notes */}
-              {loveNotes.map((note, index) => (
+                {/* Outer ring */}
                 <motion.div
-                  key={note}
-                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{
+                    rotate: 360,
+                  }}
+                  transition={{
+                    duration: 22,
+                    repeat: Infinity,
+                    ease: "linear",
+                  }}
+                  className="
+                    pointer-events-none
+                    absolute
+                    inset-[4%]
+                    rounded-full
+                    border
+                    border-rose-300/50
+                  "
+                />
+
+                {/* Dashed ring */}
+                <motion.div
+                  animate={{
+                    rotate: -360,
+                  }}
+                  transition={{
+                    duration: 18,
+                    repeat: Infinity,
+                    ease: "linear",
+                  }}
+                  className="
+                    pointer-events-none
+                    absolute
+                    inset-[11%]
+                    rounded-full
+                    border-2
+                    border-dashed
+                    border-rose-300/90
+                  "
+                />
+
+                {/* Photo */}
+                <motion.div
+                  initial={{
+                    opacity: 0,
+                    scale: 0.8,
+                    rotate: -5,
+                  }}
                   animate={{
                     opacity: 1,
                     scale: 1,
-                    y: [-4, -12, -4],
+                    rotate: 0,
                   }}
                   transition={{
-                    opacity: { delay: 0.9 + index * 0.2 },
-                    scale: { delay: 0.9 + index * 0.2 },
+                    delay: 0.45,
+                    type: "spring",
+                    stiffness: 110,
+                    damping: 14,
+                  }}
+                  className="
+                    relative
+                    z-10
+                    aspect-square
+                    w-[62%]
+                    rounded-full
+                  "
+                >
+                  <div className="absolute inset-0 animate-pulse rounded-full bg-gradient-to-tr from-rose-400 via-pink-300 to-red-400 opacity-60 blur-xl" />
+
+                  <div className="relative h-full w-full rounded-full bg-gradient-to-tr from-rose-400 via-pink-300 to-red-400 p-1.5 shadow-2xl sm:p-2">
+                    <div className="h-full w-full overflow-hidden rounded-full border-4 border-white bg-rose-100 sm:border-[6px]">
+                      <img
+                        src="/images/Couple1.jpg"
+                        alt="Our special birthday memory"
+                        loading="eager"
+                        className="
+                          h-full
+                          w-full
+                          object-cover
+                          object-center
+                          transition-transform
+                          duration-700
+                          hover:scale-110
+                        "
+                      />
+                    </div>
+                  </div>
+                </motion.div>
+
+                {/* Favorite person note */}
+                <motion.div
+                  initial={{
+                    opacity: 0,
+                    scale: 0.85,
+                  }}
+                  animate={{
+                    opacity: 1,
+                    scale: 1,
+                    y: [-4, -10, -4],
+                  }}
+                  transition={{
+                    opacity: {
+                      delay: 0.8,
+                    },
+                    scale: {
+                      delay: 0.8,
+                    },
                     y: {
-                      duration: 3 + index,
+                      duration: 3.2,
                       repeat: Infinity,
-                      delay: index * 0.4,
+                      ease: "easeInOut",
                     },
                   }}
-                  className={`absolute hidden sm:block px-3 py-2 rounded-full bg-white/80 border border-rose-100 text-rose-600 text-xs font-bold shadow-md ${
-                    index === 0
-                      ? "top-2 right-8"
-                      : index === 1
-                      ? "bottom-4 right-2"
-                      : "bottom-8 left-4"
-                  }`}
+                  className="
+                    absolute
+                    right-0
+                    top-[8%]
+                    z-20
+                    hidden
+                    whitespace-nowrap
+                    rounded-full
+                    border
+                    border-rose-100
+                    bg-white/90
+                    px-4
+                    py-2
+                    text-xs
+                    font-bold
+                    text-rose-600
+                    shadow-lg
+                    backdrop-blur-md
+                    2xl:block
+                  "
                 >
-                  {note}
+                  My favorite person
                 </motion.div>
-              ))}
+
+                {/* Mobile decorations */}
+                <motion.span
+                  animate={{
+                    y: [-3, -10, -3],
+                    rotate: [-5, 5, -5],
+                  }}
+                  transition={{
+                    duration: 3,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                  className="absolute left-[4%] top-[12%] text-2xl lg:hidden"
+                >
+                  💕
+                </motion.span>
+
+                <motion.span
+                  animate={{
+                    y: [-3, -11, -3],
+                    rotate: [5, -5, 5],
+                  }}
+                  transition={{
+                    duration: 3.5,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                  className="absolute bottom-[10%] right-[5%] text-2xl lg:hidden"
+                >
+                  ✨
+                </motion.span>
+              </div>
             </div>
           </div>
-        </motion.div>
-      </div>
+        </motion.section>
+      </main>
     </PageWrapper>
   );
 };
