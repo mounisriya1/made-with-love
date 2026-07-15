@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   Delete,
   Heart,
@@ -63,8 +63,13 @@ const floatingItems = [
   },
 ];
 
+interface LocationState {
+  from?: string;
+}
+
 const WelcomeLock = () => {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const redirectTimerRef = useRef<number | null>(null);
   const errorTimerRef = useRef<number | null>(null);
@@ -76,14 +81,17 @@ const WelcomeLock = () => {
 
   useEffect(() => {
     const isAlreadyUnlocked =
-      localStorage.getItem(UNLOCK_STORAGE_KEY) === "true";
+      sessionStorage.getItem(UNLOCK_STORAGE_KEY) === "true";
 
     if (isAlreadyUnlocked) {
-      navigate("/home", {
+      const state = location.state as LocationState | null;
+      const destination = state?.from || "/home";
+
+      navigate(destination, {
         replace: true,
       });
     }
-  }, [navigate]);
+  }, [location.state, navigate]);
 
   useEffect(() => {
     return () => {
@@ -115,42 +123,7 @@ const WelcomeLock = () => {
     setError("");
   };
 
-  const handleUnlock = () => {
-    if (isSuccess) {
-      return;
-    }
-
-    if (pin.length !== SECRET_PIN.length) {
-      setError("Please enter the complete special date 💌");
-      setShakeCard(true);
-
-      if (errorTimerRef.current !== null) {
-        window.clearTimeout(errorTimerRef.current);
-      }
-
-      errorTimerRef.current = window.setTimeout(() => {
-        setShakeCard(false);
-      }, 500);
-
-      return;
-    }
-
-    if (pin === SECRET_PIN) {
-      setError("");
-      setIsSuccess(true);
-
-      localStorage.setItem(UNLOCK_STORAGE_KEY, "true");
-
-      redirectTimerRef.current = window.setTimeout(() => {
-        navigate("/home", {
-          replace: true,
-        });
-      }, 1000);
-
-      return;
-    }
-
-    setError("Oops! That is not our special date 💌");
+  const triggerErrorAnimation = (clearPin = false) => {
     setShakeCard(true);
 
     if (errorTimerRef.current !== null) {
@@ -159,8 +132,44 @@ const WelcomeLock = () => {
 
     errorTimerRef.current = window.setTimeout(() => {
       setShakeCard(false);
-      setPin("");
+
+      if (clearPin) {
+        setPin("");
+      }
     }, 500);
+  };
+
+  const handleUnlock = () => {
+    if (isSuccess) {
+      return;
+    }
+
+    if (pin.length !== SECRET_PIN.length) {
+      setError("Please enter the complete special date 💌");
+      triggerErrorAnimation();
+      return;
+    }
+
+    if (pin === SECRET_PIN) {
+      setError("");
+      setIsSuccess(true);
+
+      sessionStorage.setItem(UNLOCK_STORAGE_KEY, "true");
+
+      const state = location.state as LocationState | null;
+      const destination = state?.from || "/home";
+
+      redirectTimerRef.current = window.setTimeout(() => {
+        navigate(destination, {
+          replace: true,
+        });
+      }, 1000);
+
+      return;
+    }
+
+    setError("Oops! That is not our special date 💌");
+    triggerErrorAnimation(true);
   };
 
   return (

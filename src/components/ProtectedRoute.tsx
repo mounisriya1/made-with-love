@@ -11,7 +11,7 @@ const ProtectedRoute = ({
   const location = useLocation();
 
   const isUnlocked =
-    localStorage.getItem("birthdayUnlocked") === "true";
+    sessionStorage.getItem("birthdayUnlocked") === "true";
 
   if (!isUnlocked) {
     return (
