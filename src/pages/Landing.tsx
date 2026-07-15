@@ -196,46 +196,7 @@ const Landing = () => {
             {/* Left content */}
             <div className="order-2 min-w-0 text-center lg:order-1 lg:text-left">
               {/* Badge */}
-              <motion.div
-                initial={{
-                  opacity: 0,
-                  y: 12,
-                }}
-                animate={{
-                  opacity: 1,
-                  y: 0,
-                }}
-                transition={{
-                  delay: 0.15,
-                }}
-                className="
-                  inline-flex
-                  max-w-full
-                  items-center
-                  justify-center
-                  gap-2
-                  rounded-full
-                  border
-                  border-rose-200
-                  bg-white/80
-                  px-3
-                  py-2
-                  text-[10px]
-                  font-extrabold
-                  text-rose-600
-                  shadow-md
-                  sm:px-4
-                  sm:text-sm
-                "
-              >
-                <Crown className="h-4 w-4 shrink-0 text-rose-500" />
-
-                <span className="truncate">
-                  Birthday Mission Unlocked
-                </span>
-
-                <Sparkles className="h-4 w-4 shrink-0 text-pink-500" />
-              </motion.div>
+              
 
               {/* Heading */}
               <motion.h1
@@ -512,7 +473,7 @@ const Landing = () => {
                   <div className="relative h-full w-full rounded-full bg-gradient-to-tr from-rose-400 via-pink-300 to-red-400 p-1.5 shadow-2xl sm:p-2">
                     <div className="h-full w-full overflow-hidden rounded-full border-4 border-white bg-rose-100 sm:border-[6px]">
                       <img
-                        src="/images/Couple1.jpg"
+                        src="/images/Couple11.jpg"
                         alt="Our special birthday memory"
                         loading="eager"
                         className="
